@@ -53,7 +53,7 @@ int checks(char board[8][8], int rows, int cols){
     //Column Check 
     for (int i = 0; i < rows; i++){
         for (int j = 0; j < cols; j++){
-            if (j + 1 < rows && j + 2 < cols){
+            if (j + 1 < rows && j + 2  && j + 3 < cols){
                 if (board[j][i] == board[j+1][i] && board[j][i] == board[j+2][i]){
                     found = true;
                     return 1;
