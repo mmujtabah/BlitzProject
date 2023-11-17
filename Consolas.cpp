@@ -127,6 +127,7 @@ int main() {
     int rows = 8, cols = 8;    
     InitializeBoard(board, rows, cols);
     Display(board, rows, cols);
-    std::cout << std::endl << checks(board, rows, cols);
+    std::cout << std::endl;
+    checks(board, rows, cols);
     return 0;
 }
