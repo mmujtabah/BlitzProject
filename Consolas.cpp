@@ -80,7 +80,7 @@ void checks(char board[8][8], int rows, int cols, int& totalscore) {
             int index3 = j + 3;
             if (index1 < rows && index2 < rows) {
                 if (index3 < rows) {
-                    if (board[i][j] == board[i][index1] && board[i][j] == board[i][j] && board[i][index3]) {
+                    if (board[i][j] == board[i][index1] && board[i][j] == board[i][index2] && board[i][index3]) {
                         totalscore += scoreCalculator(board[i][j], 4);
                     }
                 }
@@ -101,12 +101,12 @@ void checks(char board[8][8], int rows, int cols, int& totalscore) {
             if (index1 < cols && index2 < cols) {
                 if (index3 < cols) {
                     if (board[j][i] == board[index1][i] && board[j][i] == board[index2][i] && board[j][i] == board[index3][i]) {
-                        totalscore += scoreCalculator(board[i][j], 4);
+                        totalscore += scoreCalculator(board[j][i], 4);
                     }
                 }
                 else {
                     if (board[j][i] == board[index1][i] && board[j][i] == board[index2][i]) {
-                        totalscore += scoreCalculator(board[i][j], 3);
+                        totalscore += scoreCalculator(board[j][i], 3);
                     }
                 }
             }
