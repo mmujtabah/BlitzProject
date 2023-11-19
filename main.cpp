@@ -17,10 +17,10 @@ void RandomSeed()
     std::srand(static_cast<unsigned int>(std::time(0)));
 }
 
-//Stores random images to textures and sets the sprite textures
+// Stores random images to textures and sets the sprite textures
 void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize)
 {
-    //Stores images in textures array
+    // Stores images in textures array
     for (int i = 0; i <= 6; ++i)
     {
         std::string filename = "image" + std::to_string(i) + ".png"; // Adjust filenames as needed
@@ -145,9 +145,13 @@ int main()
     // Declare a boolean flag to track Enter key status
     bool enterKeyPressed = false;
 
+    // Declare a variable to track the transparency state
+    bool transparencyState = false;
+
     // Load the sound buffer from a file
     sf::SoundBuffer soundBuffer;
-    if (!soundBuffer.loadFromFile("select.wav")) {
+    if (!soundBuffer.loadFromFile("select.wav"))
+    {
         std::cerr << "Failed to load sound file!" << std::endl;
         return -1;
     }
@@ -168,11 +172,19 @@ int main()
             }
             else if (event.type == sf::Event::KeyPressed)
             {
+                enterKeyPressed = false;
+                transparencyState = false;
+
                 if (event.key.code == sf::Keyboard::Enter)
                 {
                     // Set the flag to true when Enter is pressed
                     enterKeyPressed = true;
                     sound.play();
+                }
+                else if (event.key.code == sf::Keyboard::BackSpace)
+                {
+                    // Reset transparency when Backspace is pressed
+                    transparencyState = false;
                 }
                 else
                 {
@@ -233,13 +245,16 @@ int main()
         highlight.setSize(sf::Vector2f(cellSize, cellSize));
         highlight.setPosition(board[highlightedRow][highlightedCol].getPosition());
 
-        if (enterKeyPressed) {
+        // Check the highlighted state to determine transparency
+        if (enterKeyPressed)
+        {
             // Adjust transparency and borders only if Enter was just pressed
-            highlight.setFillColor(sf::Color(255, 255, 255, 100)); // Yellow with 80% transparency
+            highlight.setFillColor(sf::Color(255, 255, 255, transparencyState ? 100 : 80)); // Yellow with variable transparency
             highlight.setOutlineThickness(2.0f);                 // Border thickness
             highlight.setOutlineColor(sf::Color::Yellow);        // Border color
         }
-        else {
+        else
+        {
             // Default transparency and borders
             highlight.setFillColor(sf::Color(255, 255, 255, 0)); // Yellow with 100% transparency
             highlight.setOutlineThickness(2.0f);                 // Border thickness
