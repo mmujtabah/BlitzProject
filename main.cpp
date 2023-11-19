@@ -52,7 +52,8 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
 
             // Set the scale of the sprites
             float scale = cellSize / static_cast<float>(textures[randomTextureIndex].getSize().x);
-            sprites[i][j].setScale(scale, scale - 0.01f);
+            scale -= 0.04f;
+            sprites[i][j].setScale(scale, scale);
 
             // Center the sprite within the board block
             float xOffset = (cellSize - sprites[i][j].getGlobalBounds().width) / 2.0f;
