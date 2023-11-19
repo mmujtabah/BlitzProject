@@ -92,7 +92,6 @@ int main()
     // Set up the window
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Blitz", sf::Style::Close);
 
-
     // Set up the font for text
     sf::Font font;
     if (!font.loadFromFile("font.ttf"))
@@ -116,7 +115,7 @@ int main()
     sf::Text gameInfo;
 
     gameTitle.setFont(fontBold);
-    gameTitle.setCharacterSize(42);
+    gameTitle.setCharacterSize(36);
     gameTitle.setFillColor(sf::Color::Black);
 
     timeText.setFont(font);
@@ -143,6 +142,20 @@ int main()
     // Initialize the score
     int score = 0;
 
+    // Declare a boolean flag to track Enter key status
+    bool enterKeyPressed = false;
+
+    // Load the sound buffer from a file
+    sf::SoundBuffer soundBuffer;
+    if (!soundBuffer.loadFromFile("select.wav")) {
+        std::cerr << "Failed to load sound file!" << std::endl;
+        return -1;
+    }
+
+    // Create a sound instance
+    sf::Sound sound;
+    sound.setBuffer(soundBuffer);
+
     // Game loop
     while (window.isOpen())
     {
@@ -155,7 +168,18 @@ int main()
             }
             else if (event.type == sf::Event::KeyPressed)
             {
-                moveHighlight(event.key.code);
+                if (event.key.code == sf::Keyboard::Enter)
+                {
+                    // Set the flag to true when Enter is pressed
+                    enterKeyPressed = true;
+                    sound.play();
+                }
+                else
+                {
+                    // Set the flag to false when any other key is pressed
+                    enterKeyPressed = false;
+                    moveHighlight(event.key.code);
+                }
             }
         }
 
@@ -171,7 +195,7 @@ int main()
         score = elapsed.asSeconds();
 
         // Update text
-        gameTitle.setString("Gem Crush");
+        gameTitle.setString("Crytsal Crush Saga");
         timeText.setString("Time Left: " + std::to_string(remainingSeconds) + " s");
         scoreText.setString("Score: " + std::to_string(score));
         gameInfo.setString("Game developed by M.Mujtaba and Harris Tabassum");
@@ -208,9 +232,21 @@ int main()
         sf::RectangleShape highlight;
         highlight.setSize(sf::Vector2f(cellSize, cellSize));
         highlight.setPosition(board[highlightedRow][highlightedCol].getPosition());
-        highlight.setFillColor(sf::Color(255, 255, 255, 100)); // Yellow with 50% transparency
-        highlight.setOutlineThickness(2.0f);                 // Border thickness
-        highlight.setOutlineColor(sf::Color::Yellow);        // Border color
+
+        if (enterKeyPressed) {
+            // Adjust transparency and borders only if Enter was just pressed
+            highlight.setFillColor(sf::Color(255, 255, 255, 100)); // Yellow with 80% transparency
+            highlight.setOutlineThickness(2.0f);                 // Border thickness
+            highlight.setOutlineColor(sf::Color::Yellow);        // Border color
+        }
+        else {
+            // Default transparency and borders
+            highlight.setFillColor(sf::Color(255, 255, 255, 0)); // Yellow with 100% transparency
+            highlight.setOutlineThickness(2.0f);                 // Border thickness
+            highlight.setOutlineColor(sf::Color::Yellow);        // Border color
+        }
+
+        // Draw the highlight
         window.draw(highlight);
 
         // Display the content
