@@ -172,6 +172,7 @@ int main()
             }
             else if (event.type == sf::Event::KeyPressed)
             {
+                // Reset state for key press handling
                 enterKeyPressed = false;
                 transparencyState = false;
 
