@@ -182,7 +182,7 @@ int main()
         window.clear();
 
         // Set the background color
-        window.clear(sf::Color::White); // Change to your desired background color
+        window.clear(sf::Color(234, 182, 118)); // Change to your desired background color
 
         // Draw the time and score text
         window.draw(gameTitle);
@@ -204,7 +204,7 @@ int main()
         sf::RectangleShape highlight;
         highlight.setSize(sf::Vector2f(cellSize, cellSize));
         highlight.setPosition(board[highlightedRow][highlightedCol].getPosition());
-        highlight.setFillColor(sf::Color(255, 255, 0, 0)); // Yellow with 50% transparency
+        highlight.setFillColor(sf::Color(255, 255, 255, 100)); // Yellow with 50% transparency
         highlight.setOutlineThickness(2.0f);                 // Border thickness
         highlight.setOutlineColor(sf::Color::Yellow);        // Border color
         window.draw(highlight);
