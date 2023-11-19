@@ -40,7 +40,7 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
         for (int j = 0; j < 8; j++)
         {
             board[i][j].setSize(sf::Vector2f(cellSize, cellSize));
-            board[i][j].setPosition((i + 7.8) * cellSize, (j + 0.2) * cellSize);
+            board[i][j].setPosition((i + 7.9) * cellSize, (j + 0.2) * cellSize);
             if ((i + j) % 2 == 0)
             {
                 board[i][j].setFillColor(sf::Color(43, 42, 42)); // Grey
@@ -55,7 +55,7 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
 
             // Set the scale of the sprites
             float scale = cellSize / static_cast<float>(textures[randomTextureIndex].getSize().x);
-            scale -= 0.04f;
+            scale -= 0.07f;
             sprites[i][j].setScale(scale, scale);
 
             // Center the sprite within the board block
@@ -196,7 +196,7 @@ int main()
 
         // Update text
         gameTitle.setString("Crytsal Crush Saga");
-        timeText.setString("Time Left: " + std::to_string(remainingSeconds) + " s");
+        timeText.setString("Time Left: 0:" + std::to_string(remainingSeconds) + " s");
         scoreText.setString("Score: " + std::to_string(score));
         gameInfo.setString("Game developed by M.Mujtaba and Harris Tabassum");
 
