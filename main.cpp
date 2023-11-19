@@ -29,6 +29,9 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
             std::cerr << "Failed to load texture: " << filename << std::endl;
             return;
         }
+        else {
+            textures[i].setSmooth(true);
+        }
     }
 
     // Assign random textures to each sprite and set scale
@@ -37,7 +40,7 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
         for (int j = 0; j < 8; j++)
         {
             board[i][j].setSize(sf::Vector2f(cellSize, cellSize));
-            board[i][j].setPosition((i + 7) * cellSize, (j + 0.2) * cellSize);
+            board[i][j].setPosition((i + 7.8) * cellSize, (j + 0.2) * cellSize);
             if ((i + j) % 2 == 0)
             {
                 board[i][j].setFillColor(sf::Color(43, 42, 42)); // Grey
@@ -87,7 +90,8 @@ void moveHighlight(sf::Keyboard::Key key)
 int main()
 {
     // Set up the window
-    sf::RenderWindow window(sf::VideoMode(1000, 600), "Blitz");
+    sf::RenderWindow window(sf::VideoMode(1000, 600), "Blitz", sf::Style::Close);
+
 
     // Set up the font for text
     sf::Font font;
@@ -167,7 +171,7 @@ int main()
         score = elapsed.asSeconds();
 
         // Update text
-        gameTitle.setString("Bejeweled Blitz");
+        gameTitle.setString("Gem Crush");
         timeText.setString("Time Left: " + std::to_string(remainingSeconds) + " s");
         scoreText.setString("Score: " + std::to_string(score));
         gameInfo.setString("Game developed by M.Mujtaba and Harris Tabassum");
