@@ -108,7 +108,7 @@ int main()
         return -1;
     }
 
-    // Set up the text for time and score
+    // Set up the text for time, score, title and info
     sf::Text timeText;
     sf::Text scoreText;
     sf::Text gameTitle;
@@ -145,8 +145,6 @@ int main()
     // Declare a boolean flag to track Enter key status
     bool enterKeyPressed = false;
 
-    // Declare a variable to track the transparency state
-    bool transparencyState = false;
 
     // Load the sound buffer from a file
     sf::SoundBuffer soundBuffer;
@@ -172,10 +170,6 @@ int main()
             }
             else if (event.type == sf::Event::KeyPressed)
             {
-                // Reset state for key press handling
-                enterKeyPressed = false;
-                transparencyState = false;
-
                 if (event.key.code == sf::Keyboard::Enter)
                 {
                     // Set the flag to true when Enter is pressed
@@ -185,12 +179,12 @@ int main()
                 else if (event.key.code == sf::Keyboard::BackSpace)
                 {
                     // Reset transparency when Backspace is pressed
-                    transparencyState = false;
-                }
-                else
-                {
-                    // Set the flag to false when any other key is pressed
                     enterKeyPressed = false;
+                    sound.play();
+                    
+                }
+                else if (!enterKeyPressed){
+                    // Move highlight if Enter is not pressed
                     moveHighlight(event.key.code);
                 }
             }
@@ -250,11 +244,11 @@ int main()
         if (enterKeyPressed)
         {
             // Adjust transparency and borders only if Enter was just pressed
-            highlight.setFillColor(sf::Color(255, 255, 255, transparencyState ? 100 : 80)); // Yellow with variable transparency
+            highlight.setFillColor(sf::Color(255, 255, 255, 100)); // Yellow with variable transparency
             highlight.setOutlineThickness(2.0f);                 // Border thickness
             highlight.setOutlineColor(sf::Color::Yellow);        // Border color
         }
-        else
+        else 
         {
             // Default transparency and borders
             highlight.setFillColor(sf::Color(255, 255, 255, 0)); // Yellow with 100% transparency
