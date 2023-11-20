@@ -169,8 +169,9 @@ int main()
                 window.close();
             }
             else if (event.type == sf::Event::KeyPressed)
-            {
-                if (event.key.code == sf::Keyboard::Enter)
+            {   
+                
+                if (event.key.code == sf::Keyboard::Enter) // To select a block
                 {
                     // Set the flag to true when Enter is pressed
                     enterKeyPressed = true;
@@ -183,9 +184,15 @@ int main()
                     sound.play();
                     
                 }
-                else if (!enterKeyPressed){
+                else if (!enterKeyPressed)
+                {
                     // Move highlight if Enter is not pressed
                     moveHighlight(event.key.code);
+                }
+                else if (enterKeyPressed && (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Left))
+                {
+                    // If a block is selected perform swap operation
+                    
                 }
             }
         }
