@@ -17,7 +17,7 @@ void RandomSeed()
     std::srand(static_cast<unsigned int>(std::time(0)));
 }
 
-// Stores random images to textures and sets the sprite textures
+// Stores random images to textures and sets the sprite textures shahid jutt
 void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize)
 {
     // Stores images in textures array
