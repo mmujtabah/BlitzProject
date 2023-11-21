@@ -4,9 +4,11 @@
 #include <iostream>
 #include <iomanip>
 
-static sf::RectangleShape board[8][8];
-static sf::Texture textures[7];
-static sf::Sprite sprites[8][8];
+sf::RectangleShape board[8][8];
+sf::Texture textures[7];
+sf::Sprite sprites[8][8];
+float scales[7]; // Array to store scales for each texture index
+
 
 int highlightedRow = 0;
 int highlightedCol = 0;
@@ -29,10 +31,11 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
             std::cerr << "Failed to load texture: " << filename << std::endl;
             return;
         }
-        else {
-            textures[i].setSmooth(true);
-        }
+
+        // Set the smooth property for the texture
+        textures[i].setSmooth(true);
     }
+
 
     // Assign random textures to each sprite and set scale
     for (int i = 0; i < 8; i++)
@@ -56,6 +59,11 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
             // Set the scale of the sprites
             float scale = cellSize / static_cast<float>(textures[randomTextureIndex].getSize().x);
             scale -= 0.07f;
+            sprites[i][j].setScale(scale, scale);
+
+            // Store the scale value in the array
+            scales[randomTextureIndex] = scale;
+
             sprites[i][j].setScale(scale, scale);
 
             // Center the sprite within the board block
@@ -86,6 +94,89 @@ void moveHighlight(sf::Keyboard::Key key)
         break;
     }
 }
+
+void swap(sf::Keyboard::Key key, bool& enterKeyPressed, float cellSize)
+{
+    // Check if the highlighted position is valid
+    if (highlightedRow >= 0 && highlightedRow < 8 && highlightedCol >= 0 && highlightedCol < 8)
+    {
+        // Determine the target position based on the arrow key pressed
+        int targetRow = highlightedRow;
+        int targetCol = highlightedCol;
+
+        // Check the arrow key pressed and update the target position accordingly
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        {
+            targetCol = std::max(0, highlightedCol - 1);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        {
+            targetCol = std::min(7, highlightedCol + 1);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            targetRow = std::max(0, highlightedRow - 1);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        {
+            targetRow = std::min(7, highlightedRow + 1);
+        }
+
+        // Check if the target position is valid
+        if (targetRow >= 0 && targetRow < 8 && targetCol >= 0 && targetCol < 8)
+        {
+            // Swap the sprites (visual representation)
+            std::swap(sprites[highlightedRow][highlightedCol], sprites[targetRow][targetCol]);
+
+            // Update the positions of the swapped sprites
+            float xOffset, yOffset;
+
+            // Get the texture index of the highlighted sprite
+            int highlightedTextureIndex = 0; // Default value, adjust based on your logic
+            for (int i = 0; i < 7; ++i)
+            {
+                if (sprites[highlightedRow][highlightedCol].getTexture() == &textures[i])
+                {
+                    highlightedTextureIndex = i;
+                    break;
+                }
+            }
+
+            // Set the scale of the highlighted sprite using the stored scale value
+            sprites[highlightedRow][highlightedCol].setScale(scales[highlightedTextureIndex], scales[highlightedTextureIndex]);
+            // Center the sprite within the board block
+            xOffset = (cellSize - sprites[highlightedRow][highlightedCol].getGlobalBounds().width) / 2.0f;
+            yOffset = (cellSize - sprites[highlightedRow][highlightedCol].getGlobalBounds().height) / 2.0f;
+            sprites[highlightedRow][highlightedCol].setPosition(board[highlightedRow][highlightedCol].getPosition().x + xOffset, board[highlightedRow][highlightedCol].getPosition().y + yOffset);
+
+            // Get the texture index of the target sprite
+            int targetTextureIndex = 0;
+            for (int i = 0; i < 7; ++i)
+            {
+                if (sprites[targetRow][targetCol].getTexture() == &textures[i])
+                {
+                    targetTextureIndex = i;
+                    break;
+                }
+            }
+
+            // Set the scale of the target sprite using the stored scale value
+            sprites[targetRow][targetCol].setScale(scales[targetTextureIndex], scales[targetTextureIndex]);
+            // Center the sprite within the board block
+            xOffset = (cellSize - sprites[targetRow][targetCol].getGlobalBounds().width) / 2.0f;
+            yOffset = (cellSize - sprites[targetRow][targetCol].getGlobalBounds().height) / 2.0f;
+            sprites[targetRow][targetCol].setPosition(board[targetRow][targetCol].getPosition().x + xOffset, board[targetRow][targetCol].getPosition().y + yOffset);
+
+            // Reset the enter key pressed flag
+            enterKeyPressed = false;
+        }
+    }
+}
+
+
+
+
+
 
 int main()
 {
@@ -169,8 +260,8 @@ int main()
                 window.close();
             }
             else if (event.type == sf::Event::KeyPressed)
-            {   
-                
+            {
+
                 if (event.key.code == sf::Keyboard::Enter) // To select a block
                 {
                     // Set the flag to true when Enter is pressed
@@ -182,7 +273,7 @@ int main()
                     // Reset transparency when Backspace is pressed
                     enterKeyPressed = false;
                     sound.play();
-                    
+
                 }
                 else if (!enterKeyPressed)
                 {
@@ -192,6 +283,7 @@ int main()
                 else if (enterKeyPressed && (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Left))
                 {
                     // If a block is selected perform swap operation
+                    swap(event.key.code, enterKeyPressed, cellSize);
                     
                 }
             }
@@ -255,7 +347,7 @@ int main()
             highlight.setOutlineThickness(2.0f);                 // Border thickness
             highlight.setOutlineColor(sf::Color::Yellow);        // Border color
         }
-        else 
+        else
         {
             // Default transparency and borders
             highlight.setFillColor(sf::Color(255, 255, 255, 0)); // Yellow with 100% transparency
