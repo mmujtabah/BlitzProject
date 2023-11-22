@@ -9,11 +9,19 @@ void RandomSeed()
 {
     std::srand(std::time(0));
 }
+// Center the sprite within the board block
+void spriteScaleCenter(sf::RectangleShape board[][8], sf::Sprite sprites[][8], float cellSize, int row, int col, float scale)
+{
+    sprites[row][col].setScale(scale, scale);
+    float xOffset = (cellSize - sprites[row][col].getGlobalBounds().width) / 2.0f;
+    float yOffset = (cellSize - sprites[row][col].getGlobalBounds().height) / 2.0f;
+    sprites[row][col].setPosition(board[row][col].getPosition().x + xOffset, board[row][col].getPosition().y + yOffset);
+}
 
 // Stores random images to textures and sets the sprite textures
 void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize, float scales[])
 {
-    
+    // Stores images in textures array
     if (!textures[0].loadFromFile("image0.png"))
     {
         std::cout << "Failed to load texture: " << "image0.png" << std::endl;
@@ -49,10 +57,9 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
         std::cout << "Failed to load texture: " << "image6.png" << std::endl;
         return;
     }
-    // Stores images in textures array
-    for (int i = 0; i <= 6; ++i)
-    {
-        // Set the smooth property for the texture
+    // Set the smooth property for the texture
+    for (int i = 0; i <= 6; i++)
+    { 
         textures[i].setSmooth(true);
     }
 
@@ -84,12 +91,7 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
             // Store the scale value in the array
             scales[randomTextureIndex] = scale;
 
-            sprites[i][j].setScale(scale, scale);
-
-            // Center the sprite within the board block
-            float xOffset = (cellSize - sprites[i][j].getGlobalBounds().width) / 2.0f;
-            float yOffset = (cellSize - sprites[i][j].getGlobalBounds().height) / 2.0f;
-            sprites[i][j].setPosition(board[i][j].getPosition().x + xOffset, board[i][j].getPosition().y + yOffset);
+            spriteScaleCenter(board, sprites, cellSize, i, j, scale);
         }
     }
 }
@@ -161,17 +163,11 @@ void swap(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture te
                     break;
                 }
             }
-
-            // Set the scale of the highlighted sprite using the stored scale value
-            sprites[highlightedRow][highlightedCol].setScale(scales[highlightedTextureIndex], scales[highlightedTextureIndex]);
-            // Center the sprite within the board block
-            xOffset = (cellSize - sprites[highlightedRow][highlightedCol].getGlobalBounds().width) / 2.0f;
-            yOffset = (cellSize - sprites[highlightedRow][highlightedCol].getGlobalBounds().height) / 2.0f;
-            sprites[highlightedRow][highlightedCol].setPosition(board[highlightedRow][highlightedCol].getPosition().x + xOffset, board[highlightedRow][highlightedCol].getPosition().y + yOffset);
+            spriteScaleCenter(board, sprites, cellSize, highlightedRow, highlightedCol, scales[highlightedTextureIndex]);
 
             // Get the texture index of the target sprite
             int targetTextureIndex = 0;
-            for (int i = 0; i < 7; ++i)
+            for (int i = 0; i < 7; i++)
             {
                 if (sprites[targetRow][targetCol].getTexture() == &textures[i])
                 {
@@ -348,9 +344,9 @@ int main()
         window.draw(gameInfo);
 
         // Draw the board with highlight
-        for (int i = 0; i < 8; ++i)
+        for (int i = 0; i < 8; i++)
         {
-            for (int j = 0; j < 8; ++j)
+            for (int j = 0; j < 8; j++)
             {
                 window.draw(board[i][j]);
                 window.draw(sprites[i][j]);
