@@ -19,7 +19,7 @@ void spriteScaleCenter(sf::RectangleShape board[][8], sf::Sprite sprites[][8], f
 }
 
 // Stores random images to textures and sets the sprite textures
-void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize, float scales[])
+void randTexturesSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize, float scales[])
 {
     // Stores images in textures array
     if (!textures[0].loadFromFile("image0.png"))
@@ -244,7 +244,7 @@ int main()
 
     // Set up the board
     const float cellSize = 62.0f;
-    randTexScaleSprites(textures, sprites, board, cellSize, scales);
+    randTexturesSprites(textures, sprites, board, cellSize, scales);
 
     // Set up the clock
     sf::Clock clock;
