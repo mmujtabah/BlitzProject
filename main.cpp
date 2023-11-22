@@ -174,10 +174,6 @@ void swap(sf::Keyboard::Key key, bool& enterKeyPressed, float cellSize)
 }
 
 
-
-
-
-
 int main()
 {
     // Set up the window
