@@ -4,34 +4,54 @@
 #include <iostream>
 #include <iomanip>
 
-sf::RectangleShape board[8][8];
-sf::Texture textures[7];
-sf::Sprite sprites[8][8];
-float scales[7]; // Array to store scales for each texture index
-
-
-int highlightedRow = 0;
-int highlightedCol = 0;
-
 // Initialize random seed
 void RandomSeed()
 {
-    std::srand(static_cast<unsigned int>(std::time(0)));
+    std::srand(std::time(0));
 }
 
 // Stores random images to textures and sets the sprite textures
-void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize)
+void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize, float scales[])
 {
+    
+    if (!textures[0].loadFromFile("image0.png"))
+    {
+        std::cout << "Failed to load texture: " << "image0.png" << std::endl;
+        return;
+    }
+    if (!textures[1].loadFromFile("image1.png"))
+    {
+        std::cout << "Failed to load texture: " << "image1.png" << std::endl;
+        return;
+    }
+    if (!textures[2].loadFromFile("image2.png"))
+    {
+        std::cout << "Failed to load texture: " << "image2.png" << std::endl;
+        return;
+    }
+    if (!textures[3].loadFromFile("image3.png"))
+    {
+        std::cout << "Failed to load texture: " << "image3.png" << std::endl;
+        return;
+    }
+    if (!textures[4].loadFromFile("image4.png"))
+    {
+        std::cout << "Failed to load texture: " << "image4.png" << std::endl;
+        return;
+    }
+    if (!textures[5].loadFromFile("image5.png"))
+    {
+        std::cout << "Failed to load texture: " << "image5.png" << std::endl;
+        return;
+    }
+    if (!textures[6].loadFromFile("image6.png"))
+    {
+        std::cout << "Failed to load texture: " << "image6.png" << std::endl;
+        return;
+    }
     // Stores images in textures array
     for (int i = 0; i <= 6; ++i)
     {
-        std::string filename = "image" + std::to_string(i) + ".png"; // Adjust filenames as needed
-        if (!textures[i].loadFromFile(filename))
-        {
-            std::cerr << "Failed to load texture: " << filename << std::endl;
-            return;
-        }
-
         // Set the smooth property for the texture
         textures[i].setSmooth(true);
     }
@@ -74,7 +94,7 @@ void randTexScaleSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
     }
 }
 
-void moveHighlight(sf::Keyboard::Key key)
+void moveHighlight(sf::Keyboard::Key key, int& highlightedRow, int& highlightedCol)
 {
     switch (key)
     {
@@ -95,7 +115,7 @@ void moveHighlight(sf::Keyboard::Key key)
     }
 }
 
-void swap(sf::Keyboard::Key key, bool& enterKeyPressed, float cellSize)
+void swap(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture textures[], float scales[], sf::Keyboard::Key key, bool& enterKeyPressed, float cellSize, int& highlightedRow, int& highlightedCol)
 {
     // Check if the highlighted position is valid
     if (highlightedRow >= 0 && highlightedRow < 8 && highlightedCol >= 0 && highlightedCol < 8)
@@ -176,6 +196,13 @@ void swap(sf::Keyboard::Key key, bool& enterKeyPressed, float cellSize)
 
 int main()
 {
+    static sf::RectangleShape board[8][8];
+    static sf::Texture textures[7];
+    static sf::Sprite sprites[8][8];
+    static float scales[7]; // Array to store scales for each texture index
+    int highlightedRow = 0;
+    int highlightedCol = 0;
+
     // Set up the window
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Blitz", sf::Style::Close);
 
@@ -221,7 +248,7 @@ int main()
 
     // Set up the board
     const float cellSize = 62.0f;
-    randTexScaleSprites(textures, sprites, board, cellSize);
+    randTexScaleSprites(textures, sprites, board, cellSize, scales);
 
     // Set up the clock
     sf::Clock clock;
@@ -274,13 +301,13 @@ int main()
                 else if (!enterKeyPressed)
                 {
                     // Move highlight if Enter is not pressed
-                    moveHighlight(event.key.code);
+                    moveHighlight(event.key.code, highlightedRow, highlightedCol);
                 }
                 else if (enterKeyPressed && (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Left))
                 {
                     // If a block is selected perform swap operation
-                    swap(event.key.code, enterKeyPressed, cellSize);
-                    
+                    swap(board, sprites, textures, scales, event.key.code, enterKeyPressed, cellSize, highlightedRow, highlightedCol);
+
                 }
             }
         }
