@@ -280,7 +280,7 @@ int main()
             }
             else if (event.type == sf::Event::KeyPressed)
             {
-
+                
                 if (event.key.code == sf::Keyboard::Enter) // To select a block
                 {
                     // Set the flag to true when Enter is pressed
@@ -310,7 +310,9 @@ int main()
 
         // Update time and score
         sf::Time elapsed = clock.getElapsedTime();
-        int remainingSeconds = 60 - static_cast<int>(elapsed.asSeconds());
+        int remainingSeconds = 120 - static_cast<int>(elapsed.asSeconds());
+        int minutes = remainingSeconds / 60;
+        remainingSeconds %= 60;
         if (remainingSeconds < 0)
         {
             remainingSeconds = 0;
@@ -321,7 +323,7 @@ int main()
 
         // Update text
         gameTitle.setString("Crytsal Crush Saga");
-        timeText.setString("Time Left: 0:" + std::to_string(remainingSeconds) + " s");
+        timeText.setString("Time Left: " + std::to_string(minutes) + ":" + std::to_string(remainingSeconds) + " s");
         scoreText.setString("Score: " + std::to_string(score));
         gameInfo.setString("Game developed by M.Mujtaba and Harris Tabassum");
 
@@ -381,7 +383,7 @@ int main()
         window.display();
 
         // Exit the program after a delay when time is up
-        if (remainingSeconds == 0)
+        if (remainingSeconds == 0 && minutes == 0)
         {
             sf::sleep(sf::seconds(2)); // Add a 2-second delay
             window.close();
