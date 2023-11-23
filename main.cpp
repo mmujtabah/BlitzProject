@@ -154,7 +154,7 @@ void swap(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture te
             float xOffset, yOffset;
 
             // Get the texture index of the highlighted sprite
-            int highlightedTextureIndex = 0; // Default value, adjust based on your logic
+            int highlightedTextureIndex = 0;
             for (int i = 0; i < 7; ++i)
             {
                 if (sprites[highlightedRow][highlightedCol].getTexture() == &textures[i])
