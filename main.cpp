@@ -189,6 +189,30 @@ void swap(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture te
     }
 }
 
+// Function to initialize the board
+void initializeBoard(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture textures[], float scales[], int& highlightedRow, int& highlightedCol, float cellSize)
+{
+    highlightedRow = 0;
+    highlightedCol = 0;
+
+    // Reset textures, board, and sprites arrays
+    for (int i = 0; i < 7; i++)
+    {
+        textures[i] = sf::Texture();
+    }
+
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            board[i][j] = sf::RectangleShape();
+            sprites[i][j] = sf::Sprite();
+        }
+    }
+
+    randTexturesSprites(textures, sprites, board, cellSize, scales);
+}
+
 
 int main()
 {
@@ -280,9 +304,9 @@ int main()
             }
             else if (event.type == sf::Event::KeyPressed)
             {
-                if (event.key.code == sf::Keyboard::R) 
+                if (event.key.code == sf::Keyboard::R)
                 {
-                    randTexturesSprites(textures, sprites, board, cellSize, scales); // Shuffle the board when R key is pressed
+                    initializeBoard(board, sprites, textures, scales, highlightedRow, highlightedCol, cellSize); // Shuffle the board when R key is pressed
                 }
                 else if (event.key.code == sf::Keyboard::Enter) // To select a block
                 {
