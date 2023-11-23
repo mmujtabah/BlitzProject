@@ -186,6 +186,8 @@ void swap(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture te
             // Reset the enter key pressed flag
             enterKeyPressed = false;
         }
+        highlightedRow = targetRow;
+        highlightedCol = targetCol;
     }
 }
 
