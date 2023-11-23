@@ -59,7 +59,7 @@ void randTexturesSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::Re
     }
     // Set the smooth property for the texture
     for (int i = 0; i <= 6; i++)
-    { 
+    {
         textures[i].setSmooth(true);
     }
 
@@ -280,8 +280,11 @@ int main()
             }
             else if (event.type == sf::Event::KeyPressed)
             {
-                
-                if (event.key.code == sf::Keyboard::Enter) // To select a block
+                if (event.key.code == sf::Keyboard::R) 
+                {
+                    randTexturesSprites(textures, sprites, board, cellSize, scales); // Shuffle the board when R key is pressed
+                }
+                else if (event.key.code == sf::Keyboard::Enter) // To select a block
                 {
                     // Set the flag to true when Enter is pressed
                     enterKeyPressed = true;
