@@ -176,12 +176,7 @@ void swap(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture te
                 }
             }
 
-            // Set the scale of the target sprite using the stored scale value
-            sprites[targetRow][targetCol].setScale(scales[targetTextureIndex], scales[targetTextureIndex]);
-            // Center the sprite within the board block
-            xOffset = (cellSize - sprites[targetRow][targetCol].getGlobalBounds().width) / 2.0f;
-            yOffset = (cellSize - sprites[targetRow][targetCol].getGlobalBounds().height) / 2.0f;
-            sprites[targetRow][targetCol].setPosition(board[targetRow][targetCol].getPosition().x + xOffset, board[targetRow][targetCol].getPosition().y + yOffset);
+            spriteScaleCenter(board, sprites, cellSize, targetRow, targetCol, scales[targetTextureIndex]);
 
             // Reset the enter key pressed flag
             enterKeyPressed = false;
