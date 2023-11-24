@@ -4,95 +4,56 @@
 #include <iostream>
 #include <iomanip>
 
-// Initialize random seed
-void RandomSeed()
-{
-    std::srand(std::time(0));
-}
-// Center the sprite within the board block
-void spriteScaleCenter(sf::RectangleShape board[][8], sf::Sprite sprites[][8], float cellSize, int row, int col, float scale)
-{
-    sprites[row][col].setScale(scale, scale);
-    float xOffset = (cellSize - sprites[row][col].getGlobalBounds().width) / 2.0f;
-    float yOffset = (cellSize - sprites[row][col].getGlobalBounds().height) / 2.0f;
-    sprites[row][col].setPosition(board[row][col].getPosition().x + xOffset, board[row][col].getPosition().y + yOffset);
-}
-
-// Stores random images to textures and sets the sprite textures
-void randTexturesSprites(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize, float scales[])
+// Stores images to textures
+void imagesBlocks(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize)
 {
     // Stores images in textures array
     if (!textures[0].loadFromFile("image0.png"))
     {
-        std::cout << "Failed to load texture: " << "image0.png" << std::endl;
+        std::cout << "Failed to load texture: "
+            << "image0.png" << std::endl;
         return;
     }
     if (!textures[1].loadFromFile("image1.png"))
     {
-        std::cout << "Failed to load texture: " << "image1.png" << std::endl;
+        std::cout << "Failed to load texture: "
+            << "image1.png" << std::endl;
         return;
     }
     if (!textures[2].loadFromFile("image2.png"))
     {
-        std::cout << "Failed to load texture: " << "image2.png" << std::endl;
+        std::cout << "Failed to load texture: "
+            << "image2.png" << std::endl;
         return;
     }
     if (!textures[3].loadFromFile("image3.png"))
     {
-        std::cout << "Failed to load texture: " << "image3.png" << std::endl;
+        std::cout << "Failed to load texture: "
+            << "image3.png" << std::endl;
         return;
     }
     if (!textures[4].loadFromFile("image4.png"))
     {
-        std::cout << "Failed to load texture: " << "image4.png" << std::endl;
+        std::cout << "Failed to load texture: "
+            << "image4.png" << std::endl;
         return;
     }
     if (!textures[5].loadFromFile("image5.png"))
     {
-        std::cout << "Failed to load texture: " << "image5.png" << std::endl;
+        std::cout << "Failed to load texture: "
+            << "image5.png" << std::endl;
         return;
     }
     if (!textures[6].loadFromFile("image6.png"))
     {
-        std::cout << "Failed to load texture: " << "image6.png" << std::endl;
+        std::cout << "Failed to load texture: "
+            << "image6.png" << std::endl;
         return;
     }
     // Set the smooth property for the texture
     for (int i = 0; i <= 6; i++)
     {
         textures[i].setSmooth(true);
-    }
-
-
-    // Assign random textures to each sprite and set scale
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            board[i][j].setSize(sf::Vector2f(cellSize, cellSize));
-            board[i][j].setPosition((i + 7.9) * cellSize, (j + 0.2) * cellSize);
-            if ((i + j) % 2 == 0)
-            {
-                board[i][j].setFillColor(sf::Color(43, 42, 42)); // Grey
-            }
-            else
-            {
-                board[i][j].setFillColor(sf::Color(0, 0, 0)); // Black
-            }
-
-            int randomTextureIndex = rand() % 7;
-            sprites[i][j].setTexture(textures[randomTextureIndex]);
-
-            // Set the scale of the sprites
-            float scale = cellSize / static_cast<float>(textures[randomTextureIndex].getSize().x);
-            scale -= 0.07f;
-            sprites[i][j].setScale(scale, scale);
-
-            // Store the scale value in the array
-            scales[randomTextureIndex] = scale;
-
-            spriteScaleCenter(board, sprites, cellSize, i, j, scale);
-        }
     }
 }
 
@@ -117,7 +78,77 @@ void moveHighlight(sf::Keyboard::Key key, int& highlightedRow, int& highlightedC
     }
 }
 
-void swap(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture textures[], float scales[], sf::Keyboard::Key key, bool& enterKeyPressed, float cellSize, int& highlightedRow, int& highlightedCol)
+// Function to initialize the board
+void initializeBoard(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture textures[], int& highlightedRow, int& highlightedCol, float cellSize, int boardData[][8])
+{
+    highlightedRow = 0;
+    highlightedCol = 0;
+
+    // Reset textures, board, and sprites arrays
+    for (int i = 0; i < 7; i++)
+    {
+        textures[i] = sf::Texture();
+    }
+
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            board[i][j] = sf::RectangleShape();
+            sprites[i][j] = sf::Sprite();
+        }
+    }
+
+    imagesBlocks(textures, sprites, board, cellSize);
+}
+// Randomizes the initial data for the game board
+void randboardData(int boardData[][8])
+{
+    srand(time(0));
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            boardData[i][j] = rand() % 7;
+        }
+    }
+}
+// Draws the game board
+void drawBoard(sf::RenderWindow& window, int boardData[][8], sf::Texture textures[7], sf::RectangleShape board[][8])
+{
+    static const float cellSize = 62.0f;
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            sf::Sprite sprite;
+            board[i][j].setSize(sf::Vector2f(cellSize, cellSize));
+            board[i][j].setPosition((i + 7.9) * cellSize, (j + 0.2) * cellSize);
+            if ((i + j) % 2 == 0)
+            {
+                board[i][j].setFillColor(sf::Color(43, 42, 42)); // Grey
+            }
+            else
+            {
+                board[i][j].setFillColor(sf::Color(0, 0, 0)); // Black
+            }
+            sprite.setTexture(textures[boardData[i][j]]); // Set the texture
+            sprite.setPosition((i + 7.9) * cellSize, (j + 0.2) * cellSize); // Set the position
+            // Set the scale of the sprites
+            float scale = cellSize / static_cast<float>(textures[boardData[i][j]].getSize().x);
+            scale -= 0.07f;
+            sprite.setScale(scale, scale);
+            float xOffset = (cellSize - sprite.getGlobalBounds().width) / 2.0f;
+            float yOffset = (cellSize - sprite.getGlobalBounds().height) / 2.0f;
+            sprite.setPosition(sprite.getPosition().x + xOffset, sprite.getPosition().y + yOffset);
+            window.draw(board[i][j]);
+            window.draw(sprite);
+
+        }
+    }
+}
+// Handles swapping of data based on keyboard input
+void swapData(int boardData[][8], int& highlightedRow, int& highlightedCol, sf::Keyboard::Key key, bool& enterKeyPressed)
 {
     // Check if the highlighted position is valid
     if (highlightedRow >= 0 && highlightedRow < 8 && highlightedCol >= 0 && highlightedCol < 8)
@@ -145,80 +176,71 @@ void swap(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture te
         }
 
         // Check if the target position is valid
-        if (targetRow >= 0 && targetRow < 8 && targetCol >= 0 && targetCol < 8)
+        if (targetRow >= 0 && targetRow < 8 && targetCol >= 0 && targetCol < 8) 
         {
-            // Swap the sprites (visual representation)
-            std::swap(sprites[highlightedRow][highlightedCol], sprites[targetRow][targetCol]);
-
-            // Update the positions of the swapped sprites
-            float xOffset, yOffset;
-
-            // Get the texture index of the highlighted sprite
-            int highlightedTextureIndex = 0;
-            for (int i = 0; i < 7; ++i)
-            {
-                if (sprites[highlightedRow][highlightedCol].getTexture() == &textures[i])
-                {
-                    highlightedTextureIndex = i;
-                    break;
-                }
-            }
-            spriteScaleCenter(board, sprites, cellSize, highlightedRow, highlightedCol, scales[highlightedTextureIndex]);
-
-            // Get the texture index of the target sprite
-            int targetTextureIndex = 0;
-            for (int i = 0; i < 7; i++)
-            {
-                if (sprites[targetRow][targetCol].getTexture() == &textures[i])
-                {
-                    targetTextureIndex = i;
-                    break;
-                }
-            }
-
-            spriteScaleCenter(board, sprites, cellSize, targetRow, targetCol, scales[targetTextureIndex]);
-
-            // Reset the enter key pressed flag
+            std::swap(boardData[highlightedRow][highlightedCol], boardData[targetRow][targetCol]);
+            highlightedRow = targetRow;
+            highlightedCol = targetCol;
             enterKeyPressed = false;
         }
-        highlightedRow = targetRow;
-        highlightedCol = targetCol;
     }
 }
-
-// Function to initialize the board
-void initializeBoard(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture textures[], float scales[], int& highlightedRow, int& highlightedCol, float cellSize)
+// Checks for matches on the game board and updates data
+void checkBoard(int boardData[][8])
 {
-    highlightedRow = 0;
-    highlightedCol = 0;
-
-    // Reset textures, board, and sprites arrays
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < 6; i++)
     {
-        textures[i] = sf::Texture();
-    }
-
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 8; j++)
+        for (int j = 0; j < 6; j++)
         {
-            board[i][j] = sf::RectangleShape();
-            sprites[i][j] = sf::Sprite();
+            if (boardData[i][j] == boardData[i + 1][j] && boardData[i][j] == boardData[i + 2][j])
+            {
+                //Check if there are 3 or more same elements in a row
+                for (int k = i + 3; k < 8; k++)
+                {
+                    if (boardData[i][j] == boardData[k][j])
+                    {
+                        boardData[k][j] = rand() % 7;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                boardData[i][j] = rand() % 7;
+                boardData[i + 1][j] = rand() % 7;
+                boardData[i + 2][j] = rand() % 7;
+            }
+            if (boardData[i][j] == boardData[i][j + 1] && boardData[i][j] == boardData[i][j + 2])
+            {
+                //Check if there are 3 or more same elements in a column
+                for (int k = j + 3; k < 8; k++)
+                {
+                    if (boardData[i][j] == boardData[i][k])
+                    {
+                        boardData[i][k] = rand() % 7;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                boardData[i][j] = rand() % 7;
+                boardData[i][j + 1] = rand() % 7;
+                boardData[i][j + 2] = rand() % 7;
+            }
         }
     }
-
-    randTexturesSprites(textures, sprites, board, cellSize, scales);
 }
-
-
 int main()
 {
     static sf::RectangleShape board[8][8];
     static sf::Texture textures[7];
     static sf::Sprite sprites[8][8];
-    static float scales[7]; // Array to store scales for each texture index
     int highlightedRow = 0;
     int highlightedCol = 0;
+    int boardData[8][8]{ 0 };   // Create a 2D array to store the board data
+    randboardData(boardData); // Randomize the board data
 
     // Set up the window
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Blitz", sf::Style::Close);
@@ -261,11 +283,9 @@ int main()
     gameInfo.setCharacterSize(25);
     gameInfo.setFillColor(sf::Color::Black);
 
-    RandomSeed();
-
     // Set up the board
     const float cellSize = 62.0f;
-    randTexturesSprites(textures, sprites, board, cellSize, scales);
+    imagesBlocks(textures, sprites, board, cellSize);
 
     // Set up the clock
     sf::Clock clock;
@@ -275,7 +295,6 @@ int main()
 
     // Declare a boolean flag to track Enter key status
     bool enterKeyPressed = false;
-
 
     // Load the sound buffer from a file
     sf::SoundBuffer soundBuffer;
@@ -303,7 +322,8 @@ int main()
             {
                 if (event.key.code == sf::Keyboard::R)
                 {
-                    initializeBoard(board, sprites, textures, scales, highlightedRow, highlightedCol, cellSize); // Shuffle the board when R key is pressed
+                    //initializeBoard(board, sprites, textures, scales, highlightedRow, highlightedCol, cellSize, boardData); // Shuffle the board when R key is pressed
+                    randboardData(boardData);
                 }
                 else if (event.key.code == sf::Keyboard::Enter) // To select a block
                 {
@@ -316,7 +336,6 @@ int main()
                     // Reset transparency when Backspace is pressed
                     enterKeyPressed = false;
                     sound.play();
-
                 }
                 else if (!enterKeyPressed)
                 {
@@ -326,7 +345,7 @@ int main()
                 else if (enterKeyPressed && (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Left))
                 {
                     // If a block is selected perform swap operation
-                    swap(board, sprites, textures, scales, event.key.code, enterKeyPressed, cellSize, highlightedRow, highlightedCol);
+                    swapData(boardData, highlightedRow, highlightedCol, event.key.code, enterKeyPressed);
 
                 }
             }
@@ -352,10 +371,10 @@ int main()
         gameInfo.setString("Game developed by M.Mujtaba and Harris Tabassum");
 
         // Adjust positions for separation
-        gameTitle.setPosition(10.0f, 45.0f);    // Adjust as needed
-        timeText.setPosition(10.0f, 220.0f);     // Adjust as needed
-        scoreText.setPosition(10.0f, 320.0f);    // Adjust as needed
-        gameInfo.setPosition(50.0f, 550.0f);    // Adjust as needed
+        gameTitle.setPosition(10.0f, 45.0f);  // Adjust as needed
+        timeText.setPosition(10.0f, 220.0f);  // Adjust as needed
+        scoreText.setPosition(10.0f, 320.0f); // Adjust as needed
+        gameInfo.setPosition(50.0f, 550.0f);  // Adjust as needed
 
         // Clear the window
         window.clear();
@@ -369,15 +388,8 @@ int main()
         window.draw(scoreText);
         window.draw(gameInfo);
 
-        // Draw the board with highlight
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                window.draw(board[i][j]);
-                window.draw(sprites[i][j]);
-            }
-        }
+        checkBoard(boardData);
+        drawBoard(window, boardData, textures, board);
 
         // Draw the highlight with transparency and borders
         sf::RectangleShape highlight;
@@ -389,8 +401,8 @@ int main()
         {
             // Adjust transparency and borders only if Enter was just pressed
             highlight.setFillColor(sf::Color(255, 255, 255, 100)); // Yellow with variable transparency
-            highlight.setOutlineThickness(2.0f);                 // Border thickness
-            highlight.setOutlineColor(sf::Color::Yellow);        // Border color
+            highlight.setOutlineThickness(2.0f);                   // Border thickness
+            highlight.setOutlineColor(sf::Color::Yellow);          // Border color
         }
         else
         {
@@ -413,6 +425,5 @@ int main()
             window.close();
         }
     }
-
     return 0;
 }
