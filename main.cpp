@@ -195,7 +195,7 @@ void checkBoard(int boardData[][8])
             if (boardData[i][j] == boardData[i + 1][j] && boardData[i][j] == boardData[i + 2][j])
             {
                 //Check if there are 3 or more same elements in a row
-                for (int k = i + 3; k < 8; k++)
+                for (int k = i; k < 8; k++)
                 {
                     if (boardData[i][j] == boardData[k][j])
                     {
@@ -303,10 +303,14 @@ int main()
         std::cerr << "Failed to load sound file!" << std::endl;
         return -1;
     }
-
     // Create a sound instance
     sf::Sound sound;
     sound.setBuffer(soundBuffer);
+
+    sf::Music music;
+    if (!music.openFromFile("music.wav"))
+        return -1; // error
+    music.play();
 
     // Game loop
     while (window.isOpen())
