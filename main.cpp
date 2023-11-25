@@ -8,46 +8,46 @@
 void imagesBlocks(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize)
 {
     // Stores images in textures array
-    if (!textures[0].loadFromFile("image0.png"))
+    if (!textures[0].loadFromFile("images/image0.png"))
     {
         std::cout << "Failed to load texture: "
-            << "image0.png" << std::endl;
+            << "images/image0.png" << std::endl;
         return;
     }
-    if (!textures[1].loadFromFile("image1.png"))
+    if (!textures[1].loadFromFile("images/image1.png"))
     {
         std::cout << "Failed to load texture: "
-            << "image1.png" << std::endl;
+            << "images/image1.png" << std::endl;
         return;
     }
-    if (!textures[2].loadFromFile("image2.png"))
+    if (!textures[2].loadFromFile("images/image2.png"))
     {
         std::cout << "Failed to load texture: "
-            << "image2.png" << std::endl;
+            << "images/image2.png" << std::endl;
         return;
     }
-    if (!textures[3].loadFromFile("image3.png"))
+    if (!textures[3].loadFromFile("images/image3.png"))
     {
         std::cout << "Failed to load texture: "
-            << "image3.png" << std::endl;
+            << "images/image3.png" << std::endl;
         return;
     }
-    if (!textures[4].loadFromFile("image4.png"))
+    if (!textures[4].loadFromFile("images/image4.png"))
     {
         std::cout << "Failed to load texture: "
-            << "image4.png" << std::endl;
+            << "images/image4.png" << std::endl;
         return;
     }
-    if (!textures[5].loadFromFile("image5.png"))
+    if (!textures[5].loadFromFile("images/image5.png"))
     {
         std::cout << "Failed to load texture: "
-            << "image5.png" << std::endl;
+            << "images/image5.png" << std::endl;
         return;
     }
-    if (!textures[6].loadFromFile("image6.png"))
+    if (!textures[6].loadFromFile("images/image6.png"))
     {
         std::cout << "Failed to load texture: "
-            << "image6.png" << std::endl;
+            << "images/image6.png" << std::endl;
         return;
     }
     // Set the smooth property for the texture
@@ -185,6 +185,12 @@ void swapData(int boardData[][8], int& highlightedRow, int& highlightedCol, sf::
         }
     }
 }
+
+void elbowCheck(int boardData[][8])
+{
+
+}
+
 // Checks for matches on the game board and updates data
 void checkBoard(int boardData[][8])
 {
@@ -247,7 +253,7 @@ int main()
 
     // Set up the font for text
     sf::Font font;
-    if (!font.loadFromFile("font.ttf"))
+    if (!font.loadFromFile("fonts/font.ttf"))
     {
         std::cerr << "Failed to load font!" << std::endl;
         return -1;
@@ -255,7 +261,7 @@ int main()
 
     // Set up the bold font for title
     sf::Font fontBold;
-    if (!fontBold.loadFromFile("fontBold.otf"))
+    if (!fontBold.loadFromFile("fonts/fontBold.otf"))
     {
         std::cerr << "Failed to load bold font!" << std::endl;
         return -1;
@@ -298,7 +304,7 @@ int main()
 
     // Load the sound buffer from a file
     sf::SoundBuffer soundBuffer;
-    if (!soundBuffer.loadFromFile("select.wav"))
+    if (!soundBuffer.loadFromFile("sounds/select.wav"))
     {
         std::cerr << "Failed to load sound file!" << std::endl;
         return -1;
@@ -308,7 +314,7 @@ int main()
     sound.setBuffer(soundBuffer);
 
     sf::Music music;
-    if (!music.openFromFile("music.wav"))
+    if (!music.openFromFile("sounds/music.wav"))
         return -1; // error
     music.play();
 
