@@ -315,6 +315,84 @@ void swapData(int boardData[][8], int& highlightedRow, int& highlightedCol, sf::
     }
 }
 
+bool checkElbowGems(int boardData[][8], int row, int col)
+{
+    srand(time(0));
+    if (col + 2 < 8 && row + 2 < 8 &&
+        boardData[row][col] == boardData[row][col + 1] &&
+        boardData[row][col] == boardData[row][col + 2] &&
+        boardData[row][col] == boardData[row + 1][col + 2] &&
+        boardData[row][col] == boardData[row + 2][col + 2])
+    {
+        boardData[row + 2][col + 2] = blueFireGem(boardData[row][col]);
+        boardData[row][col] = rand() % 7;
+        boardData[row][col + 1] = rand() % 7;
+        boardData[row][col + 2] = rand() % 7;
+        boardData[row + 1][col + 2] = rand() % 7;
+        return true;
+    }
+
+    if (row + 2 < 8 && col + 2 < 8 &&
+        boardData[row][col] == boardData[row + 1][col] &&
+        boardData[row][col] == boardData[row + 2][col] &&
+        boardData[row][col] == boardData[row][col + 1] &&
+        boardData[row][col] == boardData[row][col + 2])
+    {
+        boardData[row][col + 2] = blueFireGem(boardData[row][col]);
+        boardData[row][col] = rand() % 7;
+        boardData[row][col + 1] = rand() % 7;
+        boardData[row + 1][col] = rand() % 7;
+        boardData[row + 2][col] = rand() % 7;
+        return true;
+    }
+
+    if (row - 2 >= 0 && col + 2 < 8 &&
+        boardData[row][col] == boardData[row - 1][col] &&
+        boardData[row][col] == boardData[row - 2][col] &&
+        boardData[row][col] == boardData[row][col + 1] &&
+        boardData[row][col] == boardData[row][col + 2])
+    {
+        boardData[row][col + 2] = blueFireGem(boardData[row][col]);
+        boardData[row][col] = rand() % 7;
+        boardData[row][col + 1] = rand() % 7;
+        boardData[row - 1][col] = rand() % 7;
+        boardData[row - 2][col] = rand() % 7;
+        return true;
+    }
+
+    if (row - 2 >= 0 && col - 2 >= 0 &&
+        boardData[row][col] == boardData[row - 1][col] &&
+        boardData[row][col] == boardData[row - 2][col] &&
+        boardData[row][col] == boardData[row][col - 1] &&
+        boardData[row][col] == boardData[row][col - 2])
+    {
+        boardData[row][col] = blueFireGem(boardData[row][col]);
+        boardData[row - 1][col] = rand() % 7;
+        boardData[row - 2][col] = rand() % 7;
+        boardData[row][col - 1] = rand() % 7;
+        boardData[row][col - 2] = rand() % 7;
+        return true;
+
+    }
+    return false;
+}
+
+bool elbowGems(int boardData[][8])
+{
+    bool soundPlay = false;
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            bool flag = checkElbowGems(boardData, i, j);
+            if (flag)
+            {
+                soundPlay = true;
+            }
+        }
+    }
+    return soundPlay;
+}
 // Checks for matches on the game board and updates data
 void checkBoard(int boardData[][8])
 {
@@ -373,7 +451,7 @@ int main()
     randboardData(boardData); // Randomize the board data
 
     // Set up the window
-    sf::RenderWindow window(sf::VideoMode(1000, 600), "Blitz", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
     window.setFramerateLimit(60);
 
     // Set up the font for text
@@ -428,16 +506,36 @@ int main()
     bool enterKeyPressed = false;
 
     // Load the sound buffer from a file
-    sf::SoundBuffer soundBuffer;
-    if (!soundBuffer.loadFromFile("sounds/select.wav"))
+    sf::SoundBuffer soundEffect1;
+    if (!soundEffect1.loadFromFile("sounds/select.wav"))
+    {
+        std::cerr << "Failed to load sound file!" << std::endl;
+        return -1;
+    }
+    sf::SoundBuffer soundEffect2;
+    if (!soundEffect2.loadFromFile("sounds/sequence1.wav"))
+    {
+        std::cerr << "Failed to load sound file!" << std::endl;
+        return -1;
+    }
+    sf::SoundBuffer soundEffect3;
+    if (!soundEffect3.loadFromFile("sounds/sequence2.wav"))
+    {
+        std::cerr << "Failed to load sound file!" << std::endl;
+        return -1;
+    }
+    sf::SoundBuffer soundEffect4;
+    if (!soundEffect4.loadFromFile("sounds/sequence3.wav"))
     {
         std::cerr << "Failed to load sound file!" << std::endl;
         return -1;
     }
     // Create a sound instance
-    sf::Sound sound;
-    sound.setBuffer(soundBuffer);
-
+    sf::Sound sound, sound1, sound2, sound3;
+    sound.setBuffer(soundEffect1);
+    sound1.setBuffer(soundEffect2);
+    sound2.setBuffer(soundEffect3);
+    sound3.setBuffer(soundEffect4);
     sf::Music music;
     if (!music.openFromFile("sounds/music.wav"))
         return -1; // error
@@ -522,6 +620,10 @@ int main()
         window.draw(scoreText);
         window.draw(gameInfo);
 
+        if (elbowGems(boardData))
+        {
+            sound3.play();
+        }
         checkBoard(boardData);
         drawBoard(window, boardData, textures, board);
 
