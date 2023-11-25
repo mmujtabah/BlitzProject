@@ -5,7 +5,7 @@
 #include <iomanip>
 
 // Stores images to textures
-void imagesBlocks(sf::Texture textures[], sf::Sprite sprites[][8], sf::RectangleShape board[][8], float cellSize)
+void imagesBlocks(sf::Texture textures[], sf::Texture fireTextures[], sf::Texture effectTextures[])
 {
     // Stores images in textures array
     if (!textures[0].loadFromFile("images/image0.png"))
@@ -50,10 +50,98 @@ void imagesBlocks(sf::Texture textures[], sf::Sprite sprites[][8], sf::Rectangle
             << "images/image6.png" << std::endl;
         return;
     }
+
+    if (!fireTextures[0].loadFromFile("images/imagefire0.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imagefire0.png" << std::endl;
+        return;
+    }
+    if (!fireTextures[1].loadFromFile("images/imagefire1.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imagefire1.png" << std::endl;
+        return;
+    }
+    if (!fireTextures[2].loadFromFile("images/imagefire2.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imagefire2.png" << std::endl;
+        return;
+    }
+    if (!fireTextures[3].loadFromFile("images/imagefire3.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imagefire3.png" << std::endl;
+        return;
+    }
+    if (!fireTextures[4].loadFromFile("images/imagefire4.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imagefire4.png" << std::endl;
+        return;
+    }
+    if (!fireTextures[5].loadFromFile("images/imagefire5.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imagefire5.png" << std::endl;
+        return;
+    }
+    if (!fireTextures[6].loadFromFile("images/imagefire6.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imagefire6.png" << std::endl;
+        return;
+    }
+
+    if (!effectTextures[0].loadFromFile("images/imageeffect0.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imageeffect0.png" << std::endl;
+        return;
+    }
+    if (!effectTextures[1].loadFromFile("images/imageeffect1.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imageeffect1.png" << std::endl;
+        return;
+    }
+    if (!effectTextures[2].loadFromFile("images/imageeffect2.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imageeffect.png" << std::endl;
+        return;
+    }
+    if (!effectTextures[3].loadFromFile("images/imageeffect3.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imageeffect3.png" << std::endl;
+        return;
+    }
+    if (!effectTextures[4].loadFromFile("images/imageeffect4.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imageeffect4.png" << std::endl;
+        return;
+    }
+    if (!effectTextures[5].loadFromFile("images/imageeffect5.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imageeffect5.png" << std::endl;
+        return;
+    }
+    if (!effectTextures[6].loadFromFile("images/imageeffect6.png"))
+    {
+        std::cout << "Failed to load texture: "
+            << "images/imageeffect6.png" << std::endl;
+        return;
+    }
     // Set the smooth property for the texture
     for (int i = 0; i <= 6; i++)
     {
         textures[i].setSmooth(true);
+        fireTextures[i].setSmooth(true);
+        effectTextures[i].setSmooth(true);
     }
 }
 
@@ -78,29 +166,6 @@ void moveHighlight(sf::Keyboard::Key key, int& highlightedRow, int& highlightedC
     }
 }
 
-// Function to initialize the board
-void initializeBoard(sf::RectangleShape board[][8], sf::Sprite sprites[][8], sf::Texture textures[], int& highlightedRow, int& highlightedCol, float cellSize, int boardData[][8])
-{
-    highlightedRow = 0;
-    highlightedCol = 0;
-
-    // Reset textures, board, and sprites arrays
-    for (int i = 0; i < 7; i++)
-    {
-        textures[i] = sf::Texture();
-    }
-
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            board[i][j] = sf::RectangleShape();
-            sprites[i][j] = sf::Sprite();
-        }
-    }
-
-    imagesBlocks(textures, sprites, board, cellSize);
-}
 // Randomizes the initial data for the game board
 void randboardData(int boardData[][8])
 {
@@ -186,11 +251,6 @@ void swapData(int boardData[][8], int& highlightedRow, int& highlightedCol, sf::
     }
 }
 
-void elbowCheck(int boardData[][8])
-{
-
-}
-
 // Checks for matches on the game board and updates data
 void checkBoard(int boardData[][8])
 {
@@ -242,6 +302,8 @@ int main()
 {
     static sf::RectangleShape board[8][8];
     static sf::Texture textures[7];
+    static sf::Texture fireTextures[7];
+    static sf::Texture effectTextures[7];
     static sf::Sprite sprites[8][8];
     int highlightedRow = 0;
     int highlightedCol = 0;
@@ -291,7 +353,7 @@ int main()
 
     // Set up the board
     const float cellSize = 62.0f;
-    imagesBlocks(textures, sprites, board, cellSize);
+    imagesBlocks(textures, fireTextures, effectTextures);
 
     // Set up the clock
     sf::Clock clock;
@@ -332,7 +394,6 @@ int main()
             {
                 if (event.key.code == sf::Keyboard::R)
                 {
-                    //initializeBoard(board, sprites, textures, scales, highlightedRow, highlightedCol, cellSize, boardData); // Shuffle the board when R key is pressed
                     randboardData(boardData);
                 }
                 else if (event.key.code == sf::Keyboard::Enter) // To select a block
