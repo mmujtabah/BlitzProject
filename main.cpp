@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 
+
 // Stores images to textures
 void imagesBlocks(sf::Texture textures[])
 {
@@ -108,7 +109,7 @@ void imagesBlocks(sf::Texture textures[])
     if (!textures[16].loadFromFile("images/imageeffect2.png"))
     {
         std::cout << "Failed to load texture: "
-            << "images/imageeffect.png" << std::endl;
+            << "images/imageeffect2.png" << std::endl;
         return;
     }
     if (!textures[17].loadFromFile("images/imageeffect3.png"))
@@ -141,6 +142,7 @@ void imagesBlocks(sf::Texture textures[])
         textures[i].setSmooth(true);
     }
 }
+
 
 // Return index of yellow fire gem
 int yellowFireGem(int index)
@@ -176,7 +178,7 @@ int yellowFireGem(int index)
 }
 
 // Return index of blue fire gem
-int blueFireGem(int index)
+int destroyerGem(int index)
 {
     int returnIndex = 0;
     switch (index)
@@ -305,7 +307,7 @@ void swapData(int boardData[][8], int& highlightedRow, int& highlightedCol, sf::
         }
 
         // Check if the target position is valid
-        if (targetRow >= 0 && targetRow < 8 && targetCol >= 0 && targetCol < 8) 
+        if (targetRow >= 0 && targetRow < 8 && targetCol >= 0 && targetCol < 8)
         {
             std::swap(boardData[highlightedRow][highlightedCol], boardData[targetRow][targetCol]);
             highlightedRow = targetRow;
@@ -324,7 +326,7 @@ bool checkElbowGems(int boardData[][8], int row, int col)
         boardData[row][col] == boardData[row + 1][col + 2] &&
         boardData[row][col] == boardData[row + 2][col + 2])
     {
-        boardData[row + 2][col + 2] = blueFireGem(boardData[row][col]);
+        boardData[row + 2][col + 2] = destroyerGem(boardData[row][col]);
         boardData[row][col] = rand() % 7;
         boardData[row][col + 1] = rand() % 7;
         boardData[row][col + 2] = rand() % 7;
@@ -338,7 +340,7 @@ bool checkElbowGems(int boardData[][8], int row, int col)
         boardData[row][col] == boardData[row][col + 1] &&
         boardData[row][col] == boardData[row][col + 2])
     {
-        boardData[row][col + 2] = blueFireGem(boardData[row][col]);
+        boardData[row][col + 2] = destroyerGem(boardData[row][col]);
         boardData[row][col] = rand() % 7;
         boardData[row][col + 1] = rand() % 7;
         boardData[row + 1][col] = rand() % 7;
@@ -352,7 +354,7 @@ bool checkElbowGems(int boardData[][8], int row, int col)
         boardData[row][col] == boardData[row][col + 1] &&
         boardData[row][col] == boardData[row][col + 2])
     {
-        boardData[row][col + 2] = blueFireGem(boardData[row][col]);
+        boardData[row][col + 2] = destroyerGem(boardData[row][col]);
         boardData[row][col] = rand() % 7;
         boardData[row][col + 1] = rand() % 7;
         boardData[row - 1][col] = rand() % 7;
@@ -366,7 +368,7 @@ bool checkElbowGems(int boardData[][8], int row, int col)
         boardData[row][col] == boardData[row][col - 1] &&
         boardData[row][col] == boardData[row][col - 2])
     {
-        boardData[row][col] = blueFireGem(boardData[row][col]);
+        boardData[row][col] = destroyerGem(boardData[row][col]);
         boardData[row - 1][col] = rand() % 7;
         boardData[row - 2][col] = rand() % 7;
         boardData[row][col - 1] = rand() % 7;
@@ -377,7 +379,7 @@ bool checkElbowGems(int boardData[][8], int row, int col)
     return false;
 }
 
-bool elbowGems(int boardData[][8])
+bool elbowGems(int boardData[][8], int& score)
 {
     bool soundPlay = false;
     for (int i = 0; i < 8; i++)
@@ -388,26 +390,29 @@ bool elbowGems(int boardData[][8])
             if (flag)
             {
                 soundPlay = true;
+                score += 500;
             }
         }
     }
     return soundPlay;
 }
 // Checks for matches on the game board and updates data
-void checkBoard(int boardData[][8])
+void checkBoard(int boardData[][8], int& score)
 {
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 8; i++)
     {
-        for (int j = 0; j < 6; j++)
+        for (int j = 0; j < 8; j++)
         {
             if (boardData[i][j] == boardData[i + 1][j] && boardData[i][j] == boardData[i + 2][j])
             {
-                //Check if there are 3 or more same elements in a row
-                for (int k = i; k < 8; k++)
+                score += 150;
+                //Check if there are 3 or more same elements in a column
+                for (int k = i + 3; k < 8; k++)
                 {
                     if (boardData[i][j] == boardData[k][j])
                     {
                         boardData[k][j] = rand() % 7;
+                        score += 50;
                     }
                     else
                     {
@@ -421,12 +426,14 @@ void checkBoard(int boardData[][8])
             }
             if (boardData[i][j] == boardData[i][j + 1] && boardData[i][j] == boardData[i][j + 2])
             {
-                //Check if there are 3 or more same elements in a column
+                //Check if there are 3 or more same elements in a row
+                score += 150;
                 for (int k = j + 3; k < 8; k++)
                 {
                     if (boardData[i][j] == boardData[i][k])
                     {
                         boardData[i][k] = rand() % 7;
+                        score += 50;
                     }
                     else
                     {
@@ -538,13 +545,13 @@ int main()
     sound2.setBuffer(soundEffect3);
     sound3.setBuffer(soundEffect4);
     sf::Music music;
-    if (!music.openFromFile("sounds/music.wav"))
+    if (!music.openFromFile("sounds/moogcity.wav"))
         return -1; // error
     music.play();
 
     // Load the image into a texture
     sf::Texture backgroundImage;
-    if (!backgroundImage.loadFromFile("images/background.png")) {
+    if (!backgroundImage.loadFromFile("images/bg.png")) {
         // Handle the case where the image cannot be loaded
         return -1;
     }
@@ -614,9 +621,6 @@ int main()
             remainingSeconds = 0;
         }
 
-        // Update score every second
-        score = elapsed.asSeconds();
-
         // Update text
         gameTitle.setString("Crytsal Crush Saga");
         timeText.setString("Time Left: " + std::to_string(minutes) + ":" + std::to_string(remainingSeconds) + " s");
@@ -641,11 +645,11 @@ int main()
         window.draw(scoreText);
         window.draw(gameInfo);
 
-        if (elbowGems(boardData))
+        if (elbowGems(boardData, score))
         {
             sound3.play();
         }
-        checkBoard(boardData);
+        checkBoard(boardData, score);
         drawBoard(window, boardData, textures, board);
 
         // Draw the highlight with transparency and borders
