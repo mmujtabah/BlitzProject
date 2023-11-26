@@ -454,6 +454,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
     window.setFramerateLimit(60);
 
+
     // Set up the font for text
     sf::Font font;
     if (!font.loadFromFile("fonts/font.ttf"))
@@ -478,19 +479,19 @@ int main()
 
     gameTitle.setFont(fontBold);
     gameTitle.setCharacterSize(36);
-    gameTitle.setFillColor(sf::Color::Black);
+    gameTitle.setFillColor(sf::Color::White);
 
     timeText.setFont(font);
     timeText.setCharacterSize(35);
-    timeText.setFillColor(sf::Color::Black);
+    timeText.setFillColor(sf::Color::White);
 
     scoreText.setFont(font);
     scoreText.setCharacterSize(35);
-    scoreText.setFillColor(sf::Color::Black);
+    scoreText.setFillColor(sf::Color::White);
 
     gameInfo.setFont(font);
     gameInfo.setCharacterSize(25);
-    gameInfo.setFillColor(sf::Color::Black);
+    gameInfo.setFillColor(sf::Color::White);
 
     // Set up the board
     const float cellSize = 62.0f;
@@ -540,6 +541,26 @@ int main()
     if (!music.openFromFile("sounds/music.wav"))
         return -1; // error
     music.play();
+
+    // Load the image into a texture
+    sf::Texture backgroundImage;
+    if (!backgroundImage.loadFromFile("images/background.png")) {
+        // Handle the case where the image cannot be loaded
+        return -1;
+    }
+    // Create a sprite and set its texture to the loaded image
+    sf::Sprite backgroundSprite(backgroundImage);
+
+    // Set the desired size for the background image
+    float desiredWidth = 1000.0f;  // Adjust to your desired width
+    float desiredHeight = 600.0f;  // Adjust to your desired height
+
+    // Calculate the scaling factors for width and height
+    float scaleX = desiredWidth / backgroundSprite.getLocalBounds().width;
+    float scaleY = desiredHeight / backgroundSprite.getLocalBounds().height;
+
+    // Set the scale of the background sprite
+    backgroundSprite.setScale(scaleX, scaleY);
 
     // Game loop
     while (window.isOpen())
@@ -612,7 +633,7 @@ int main()
         window.clear();
 
         // Set the background color
-        window.clear(sf::Color(234, 182, 118)); // Change to your desired background color
+        window.draw(backgroundSprite); // Change to your desired background color
 
         // Draw the time and score text
         window.draw(gameTitle);
