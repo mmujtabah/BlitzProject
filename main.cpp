@@ -632,8 +632,8 @@ int main()
         // Clear the window
         window.clear();
 
-        // Set the background color
-        window.draw(backgroundSprite); // Change to your desired background color
+        // Set the background image
+        window.draw(backgroundSprite);
 
         // Draw the time and score text
         window.draw(gameTitle);
