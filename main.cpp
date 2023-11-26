@@ -144,39 +144,6 @@ void imagesBlocks(sf::Texture textures[])
 }
 
 
-// Return index of yellow fire gem
-int yellowFireGem(int index)
-{
-    int returnIndex = 0;
-    switch (index)
-    {
-    case 0:
-        returnIndex = 7;
-        break;
-    case 1:
-        returnIndex = 8;
-        break;
-    case 2:
-        returnIndex = 9;
-        break;
-    case 3:
-        returnIndex = 10;
-        break;
-    case 4:
-        returnIndex = 11;
-        break;
-    case 5:
-        returnIndex = 12;
-        break;
-    case 6:
-        returnIndex = 13;
-        break;
-    default:
-        break;
-    }
-    return returnIndex;
-}
-
 // Return index of blue fire gem
 int destroyerGem(int index)
 {
@@ -203,6 +170,38 @@ int destroyerGem(int index)
         break;
     case 6:
         returnIndex = 20;
+        break;
+    default:
+        break;
+    }
+    return returnIndex;
+}
+// Return index of blue fire gem
+int flameGem(int index)
+{
+    int returnIndex = 0;
+    switch (index)
+    {
+    case 0:
+        returnIndex = 7;
+        break;
+    case 1:
+        returnIndex = 8;
+        break;
+    case 2:
+        returnIndex = 9;
+        break;
+    case 3:
+        returnIndex = 10;
+        break;
+    case 4:
+        returnIndex = 11;
+        break;
+    case 5:
+        returnIndex = 12;
+        break;
+    case 6:
+        returnIndex = 13;
         break;
     default:
         break;
