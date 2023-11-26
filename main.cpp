@@ -6,9 +6,8 @@
 
 
 // Stores images to textures
-void imagesBlocks(sf::Texture textures[])
+void loadImages(sf::Texture textures[])
 {
-    // Stores images in textures array
     if (!textures[0].loadFromFile("images/image0.png"))
     {
         std::cout << "Failed to load texture: "
@@ -93,7 +92,6 @@ void imagesBlocks(sf::Texture textures[])
             << "images/imagefire6.png" << std::endl;
         return;
     }
-
     if (!textures[14].loadFromFile("images/imageeffect0.png"))
     {
         std::cout << "Failed to load texture: "
@@ -501,7 +499,7 @@ int main()
 
     // Set up the board
     const float cellSize = 62.0f;
-    imagesBlocks(textures);
+    loadImages(textures);
 
     // Set up the clock
     sf::Clock clock;
@@ -547,7 +545,7 @@ int main()
     if (!music.openFromFile("sounds/moogcity.wav"))
         return -1; // error
     music.play();
-
+    music.setLoop(true);
     // Load the image into a texture
     sf::Texture backgroundImage;
     if (!backgroundImage.loadFromFile("images/bg.png")) {
