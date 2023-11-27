@@ -4,7 +4,6 @@
 #include <iostream>
 #include <iomanip>
 
-
 // Stores images to textures
 void loadImages(sf::Texture textures[])
 {
@@ -141,7 +140,6 @@ void loadImages(sf::Texture textures[])
     }
 }
 
-
 // Return index of blue fire gem
 int destroyerGem(int index)
 {
@@ -174,6 +172,7 @@ int destroyerGem(int index)
     }
     return returnIndex;
 }
+
 // Return index of blue fire gem
 int flameGem(int index)
 {
@@ -241,6 +240,7 @@ void randboardData(int boardData[][8])
         }
     }
 }
+
 // Draws the game board
 void drawBoard(sf::RenderWindow& window, int boardData[][8], sf::Texture textures[], sf::RectangleShape board[][8])
 {
@@ -275,6 +275,7 @@ void drawBoard(sf::RenderWindow& window, int boardData[][8], sf::Texture texture
         }
     }
 }
+
 // Handles swapping of data based on keyboard input
 void swapData(int boardData[][8], int& highlightedRow, int& highlightedCol, sf::Keyboard::Key key, bool& enterKeyPressed)
 {
@@ -314,6 +315,45 @@ void swapData(int boardData[][8], int& highlightedRow, int& highlightedCol, sf::
     }
 }
 
+// If no match is found then reverse the swap to get to original position
+void reverseSwapData(int boardData[][8], int& highlightedRow, int& highlightedCol, sf::Keyboard::Key key)
+{
+    // Check if the highlighted position is valid
+    if (highlightedRow >= 0 && highlightedRow < 8 && highlightedCol >= 0 && highlightedCol < 8)
+    {
+        // Determine the target position based on the arrow key pressed
+        int targetRow = highlightedRow;
+        int targetCol = highlightedCol;
+
+        // Check the arrow key pressed and update the target position accordingly
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        {
+            targetCol = std::min(7, highlightedCol + 1);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        {
+            targetCol = std::max(0, highlightedCol - 1);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            targetRow = std::min(7, highlightedRow + 1);
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        {
+            targetRow = std::max(0, highlightedRow - 1);
+        }
+
+        // Check if the target position is valid
+        if (targetRow >= 0 && targetRow < 8 && targetCol >= 0 && targetCol < 8)
+        {
+            std::swap(boardData[highlightedRow][highlightedCol], boardData[targetRow][targetCol]);
+            highlightedRow = targetRow;
+            highlightedCol = targetCol;
+        }
+    }
+}
+
+// Destroyer gem check
 bool checkElbowGems(int boardData[][8], int row, int col)
 {
     srand(time(0));
@@ -375,7 +415,7 @@ bool checkElbowGems(int boardData[][8], int row, int col)
     }
     return false;
 }
-
+// Checks Elbow gem and plays the sound
 bool elbowGems(int boardData[][8], int& score)
 {
     bool soundPlay = false;
@@ -394,14 +434,16 @@ bool elbowGems(int boardData[][8], int& score)
     return soundPlay;
 }
 // Checks for matches on the game board and updates data
-void checkBoard(int boardData[][8], int& score)
+bool checkBoard(int boardData[][8], int& score)
 {
+    bool flag = false;
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
             if (boardData[i][j] == boardData[i + 1][j] && boardData[i][j] == boardData[i + 2][j])
             {
+                flag = true;
                 score += 150;
                 //Check if there are 3 or more same elements in a column
                 for (int k = i + 3; k < 8; k++)
@@ -423,6 +465,7 @@ void checkBoard(int boardData[][8], int& score)
             }
             if (boardData[i][j] == boardData[i][j + 1] && boardData[i][j] == boardData[i][j + 2])
             {
+                flag = true;
                 //Check if there are 3 or more same elements in a row
                 score += 150;
                 for (int k = j + 3; k < 8; k++)
@@ -443,6 +486,7 @@ void checkBoard(int boardData[][8], int& score)
             }
         }
     }
+    return flag;
 }
 int main()
 {
@@ -569,6 +613,7 @@ int main()
     // Game loop
     while (window.isOpen())
     {
+        bool swapped = false;
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -603,6 +648,7 @@ int main()
                 {
                     // If a block is selected perform swap operation
                     swapData(boardData, highlightedRow, highlightedCol, event.key.code, enterKeyPressed);
+                    swapped = true;
 
                 }
             }
@@ -642,13 +688,29 @@ int main()
         window.draw(scoreText);
         window.draw(gameInfo);
 
-        if (elbowGems(boardData, score))
-        {
-            sound3.play();
-        }
-        checkBoard(boardData, score);
-        drawBoard(window, boardData, textures, board);
+        bool destroyerGem = elbowGems(boardData, score);
+        bool matchGems = checkBoard(boardData, score);
 
+        if (destroyerGem || matchGems)
+        {
+            if (destroyerGem)
+            {
+                sound3.play();
+            }
+            if (matchGems)
+            {
+                sound1.play();
+            }
+        }
+        else
+        {
+            if (swapped)
+            {
+                reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
+            }
+        }
+
+        drawBoard(window, boardData, textures, board);
         // Draw the highlight with transparency and borders
         sf::RectangleShape highlight;
         highlight.setSize(sf::Vector2f(cellSize, cellSize));
