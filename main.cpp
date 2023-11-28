@@ -354,8 +354,9 @@ void reverseSwapData(int boardData[][8], int& highlightedRow, int& highlightedCo
 }
 
 // Destroyer gem check
-bool checkElbowGems(int boardData[][8], int row, int col)
+bool checkElbowGems(int boardData[][8], int row, int col, int highlightedRow, int highlightedCol)
 {
+    int tempValue = boardData[highlightedRow][highlightedCol];
     srand(time(0));
     if (col + 2 < 8 && row + 2 < 8 &&
         boardData[row][col] == boardData[row][col + 1] &&
@@ -363,11 +364,19 @@ bool checkElbowGems(int boardData[][8], int row, int col)
         boardData[row][col] == boardData[row + 1][col + 2] &&
         boardData[row][col] == boardData[row + 2][col + 2])
     {
-        boardData[row + 2][col + 2] = destroyerGem(boardData[row][col]);
+        boardData[row + 2][col + 2] = rand() % 7;
         boardData[row][col] = rand() % 7;
         boardData[row][col + 1] = rand() % 7;
         boardData[row][col + 2] = rand() % 7;
         boardData[row + 1][col + 2] = rand() % 7;
+        if ((highlightedRow == row || highlightedRow == row + 1 || highlightedRow == row + 2) && (highlightedCol == col || highlightedCol == col + 1 || highlightedCol == col + 2))
+        {
+            boardData[highlightedRow][highlightedCol] = destroyerGem(tempValue);
+        }
+        else
+        {
+            boardData[row][col] = destroyerGem(boardData[row][col]);
+        }
         return true;
     }
 
@@ -377,11 +386,20 @@ bool checkElbowGems(int boardData[][8], int row, int col)
         boardData[row][col] == boardData[row][col + 1] &&
         boardData[row][col] == boardData[row][col + 2])
     {
-        boardData[row][col + 2] = destroyerGem(boardData[row][col]);
+        boardData[row][col + 2] = rand() % 7;
         boardData[row][col] = rand() % 7;
         boardData[row][col + 1] = rand() % 7;
         boardData[row + 1][col] = rand() % 7;
         boardData[row + 2][col] = rand() % 7;
+        if ((highlightedRow == row || highlightedRow == row + 1 || highlightedRow == row + 2) && (highlightedCol == col || highlightedCol == col + 1 || highlightedCol == col + 2))
+        {
+            boardData[highlightedRow][highlightedCol] = destroyerGem(tempValue);
+        }
+        else
+        {
+            boardData[row][col] = destroyerGem(boardData[row][col]);
+        }
+
         return true;
     }
 
@@ -391,11 +409,19 @@ bool checkElbowGems(int boardData[][8], int row, int col)
         boardData[row][col] == boardData[row][col + 1] &&
         boardData[row][col] == boardData[row][col + 2])
     {
-        boardData[row][col + 2] = destroyerGem(boardData[row][col]);
+        boardData[row][col + 2] = rand() % 7;
         boardData[row][col] = rand() % 7;
         boardData[row][col + 1] = rand() % 7;
         boardData[row - 1][col] = rand() % 7;
         boardData[row - 2][col] = rand() % 7;
+        if ((highlightedRow == row || highlightedRow == row - 1 || highlightedRow == row - 2) && (highlightedCol == col || highlightedCol == col + 1 || highlightedCol == col + 2))
+        {
+            boardData[highlightedRow][highlightedCol] = destroyerGem(tempValue);
+        }
+        else
+        {
+            boardData[row][col] = destroyerGem(boardData[row][col]);
+        }
         return true;
     }
 
@@ -405,25 +431,33 @@ bool checkElbowGems(int boardData[][8], int row, int col)
         boardData[row][col] == boardData[row][col - 1] &&
         boardData[row][col] == boardData[row][col - 2])
     {
-        boardData[row][col] = destroyerGem(boardData[row][col]);
+        boardData[row][col] = rand() % 7;
         boardData[row - 1][col] = rand() % 7;
         boardData[row - 2][col] = rand() % 7;
         boardData[row][col - 1] = rand() % 7;
         boardData[row][col - 2] = rand() % 7;
+        if ((highlightedRow == row || highlightedRow == row - 1 || highlightedRow == row - 2) && (highlightedCol == col || highlightedCol == col - 1 || highlightedCol == col - 2))
+        {
+            boardData[highlightedRow][highlightedCol] = destroyerGem(tempValue);
+        }
+        else
+        {
+            boardData[row][col] = destroyerGem(boardData[row][col]);
+        }
         return true;
 
     }
     return false;
 }
 // Checks Elbow gem and plays the sound
-bool elbowGems(int boardData[][8], int& score)
+bool elbowGems(int boardData[][8], int& score, int highlightedRow, int highlightedCol)
 {
     bool soundPlay = false;
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            bool flag = checkElbowGems(boardData, i, j);
+            bool flag = checkElbowGems(boardData, i, j, highlightedRow, highlightedCol);
             if (flag)
             {
                 soundPlay = true;
@@ -434,7 +468,7 @@ bool elbowGems(int boardData[][8], int& score)
     return soundPlay;
 }
 // Checks for matches on the game board and updates data
-bool checkBoard(int boardData[][8], int& score)
+bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highlightedCol)
 {
     bool flag = false;
     for (int i = 0; i < 8; i++)
@@ -445,6 +479,8 @@ bool checkBoard(int boardData[][8], int& score)
             {
                 flag = true;
                 score += 150;
+                int count = 3;
+                int tempValue = boardData[highlightedRow][highlightedCol];
                 //Check if there are 3 or more same elements in a column
                 for (int k = i + 3; k < 8; k++)
                 {
@@ -458,8 +494,18 @@ bool checkBoard(int boardData[][8], int& score)
                         break;
                     }
                 }
+                if (count > 3)
+                {
+                    if ((highlightedRow == i || highlightedRow == i + 1 || highlightedRow == i + 2) && highlightedCol == j)
+                    {
+                        boardData[highlightedRow][highlightedCol] = flameGem(tempValue);
+                    }
+                    else
+                    {
+                        boardData[i][j] = flameGem(boardData[i][j]);
+                    }
 
-                boardData[i][j] = rand() % 7;
+                }
                 boardData[i + 1][j] = rand() % 7;
                 boardData[i + 2][j] = rand() % 7;
             }
@@ -468,19 +514,31 @@ bool checkBoard(int boardData[][8], int& score)
                 flag = true;
                 //Check if there are 3 or more same elements in a row
                 score += 150;
+                int count = 3;
+                int tempValue = boardData[highlightedRow][highlightedCol];
                 for (int k = j + 3; k < 8; k++)
                 {
                     if (boardData[i][j] == boardData[i][k])
                     {
                         boardData[i][k] = rand() % 7;
                         score += 50;
+                        count++;
                     }
                     else
                     {
                         break;
                     }
                 }
-                boardData[i][j] = rand() % 7;
+                if (count > 3) {
+                    if ((highlightedCol == j || highlightedCol == j + 1 || highlightedCol == j + 2) && highlightedRow == i)
+                    {
+                        boardData[highlightedRow][highlightedCol] = flameGem(tempValue);
+                    }
+                    else
+                    {
+                        boardData[i][j] = flameGem(boardData[i][j]);
+                    }
+                }
                 boardData[i][j + 1] = rand() % 7;
                 boardData[i][j + 2] = rand() % 7;
             }
@@ -688,8 +746,8 @@ int main()
         window.draw(scoreText);
         window.draw(gameInfo);
 
-        bool destroyerGem = elbowGems(boardData, score);
-        bool matchGems = checkBoard(boardData, score);
+        bool destroyerGem = elbowGems(boardData, score, highlightedRow, highlightedCol);
+        bool matchGems = checkBoard(boardData, score, highlightedRow, highlightedCol);
 
         if (destroyerGem || matchGems)
         {
@@ -706,7 +764,8 @@ int main()
         {
             if (swapped)
             {
-                reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
+                //reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
+                std::cout << "";
             }
         }
 
