@@ -470,6 +470,7 @@ bool elbowGems(int boardData[][8], int& score, int highlightedRow, int highlight
 // Checks for matches on the game board and updates data
 bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highlightedCol)
 {
+    srand(time(0));
     bool flag = false;
     for (int i = 0; i < 8; i++)
     {
@@ -479,15 +480,16 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
             {
                 flag = true;
                 score += 150;
-                int count = 3;
+                int count = 0;
                 int tempValue = boardData[highlightedRow][highlightedCol];
                 //Check if there are 3 or more same elements in a column
-                for (int k = i + 3; k < 8; k++)
+                for (int k = i; k < 8; k++)
                 {
                     if (boardData[i][j] == boardData[k][j])
                     {
                         boardData[k][j] = rand() % 7;
                         score += 50;
+                        count++;
                     }
                     else
                     {
@@ -514,9 +516,9 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                 flag = true;
                 //Check if there are 3 or more same elements in a row
                 score += 150;
-                int count = 3;
+                int count = 0;
                 int tempValue = boardData[highlightedRow][highlightedCol];
-                for (int k = j + 3; k < 8; k++)
+                for (int k = j; k < 8; k++)
                 {
                     if (boardData[i][j] == boardData[i][k])
                     {
@@ -764,7 +766,7 @@ int main()
         {
             if (swapped)
             {
-                //reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
+                reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
                 std::cout << "";
             }
         }
