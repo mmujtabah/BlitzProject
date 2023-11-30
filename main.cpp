@@ -476,14 +476,14 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
     {
         for (int j = 0; j < 8; j++)
         {
-            if (boardData[i][j] == boardData[i + 1][j] && boardData[i][j] == boardData[i + 2][j])
+            if (boardData[i][j] == boardData[i + 1][j] && boardData[i][j] == boardData[i + 2][j]) // Row Check
             {
                 flag = true;
                 score += 150;
-                int count = 0;
+                int count = 3;
                 int tempValue = boardData[highlightedRow][highlightedCol];
                 //Check if there are 3 or more same elements in a column
-                for (int k = i; k < 8; k++)
+                for (int k = i + 3; k < 8; k++)
                 {
                     if (boardData[i][j] == boardData[k][j])
                     {
@@ -496,6 +496,9 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                         break;
                     }
                 }
+                boardData[i][j] = rand() % 7;
+                boardData[i + 1][j] = rand() % 7;
+                boardData[i + 2][j] = rand() % 7;
                 if (count > 3)
                 {
                     if ((highlightedRow == i || highlightedRow == i + 1 || highlightedRow == i + 2) && highlightedCol == j)
@@ -507,18 +510,16 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                         boardData[i][j] = flameGem(boardData[i][j]);
                     }
 
-                }
-                boardData[i + 1][j] = rand() % 7;
-                boardData[i + 2][j] = rand() % 7;
+                }            
             }
-            if (boardData[i][j] == boardData[i][j + 1] && boardData[i][j] == boardData[i][j + 2])
+            if (boardData[i][j] == boardData[i][j + 1] && boardData[i][j] == boardData[i][j + 2]) // Column Check
             {
                 flag = true;
                 //Check if there are 3 or more same elements in a row
                 score += 150;
-                int count = 0;
+                int count = 3;
                 int tempValue = boardData[highlightedRow][highlightedCol];
-                for (int k = j; k < 8; k++)
+                for (int k = j + 3; k < 8; k++)
                 {
                     if (boardData[i][j] == boardData[i][k])
                     {
@@ -531,7 +532,11 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                         break;
                     }
                 }
-                if (count > 3) {
+                boardData[i][j] = rand() % 7;
+                boardData[i][j + 1] = rand() % 7;
+                boardData[i][j + 2] = rand() % 7;
+                if (count > 3) 
+                {
                     if ((highlightedCol == j || highlightedCol == j + 1 || highlightedCol == j + 2) && highlightedRow == i)
                     {
                         boardData[highlightedRow][highlightedCol] = flameGem(tempValue);
@@ -540,9 +545,7 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                     {
                         boardData[i][j] = flameGem(boardData[i][j]);
                     }
-                }
-                boardData[i][j + 1] = rand() % 7;
-                boardData[i][j + 2] = rand() % 7;
+                }  
             }
         }
     }
@@ -766,7 +769,7 @@ int main()
         {
             if (swapped)
             {
-                reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
+                //reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
                 std::cout << "";
             }
         }
