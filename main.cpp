@@ -769,8 +769,7 @@ int main()
         {
             if (swapped)
             {
-                //reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
-                std::cout << "";
+                reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
             }
         }
 
