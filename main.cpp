@@ -4,6 +4,115 @@
 #include <iostream>
 #include <iomanip>
 
+bool showMenu(sf::RenderWindow& window)
+{
+    // Set up the font for text
+    sf::Font font;
+    if (!font.loadFromFile("fonts/menu.ttf"))
+    {
+        std::cerr << "Failed to load font!" << std::endl;
+        return false;
+    }
+    // Load the image into a texture
+    sf::Texture backgroundImage;
+    if (!backgroundImage.loadFromFile("images/bg1.jpg"))
+    {
+        // Handle the case where the image cannot be loaded
+        return false;
+    }
+    // Create a sprite and set its texture to the loaded image
+    sf::Sprite backgroundSprite(backgroundImage);
+
+    // Set the desired size for the background image
+    float desiredWidth = 1000.0f;  // Adjust to your desired width
+    float desiredHeight = 600.0f;  // Adjust to your desired height
+
+    // Calculate the scaling factors for width and height
+    float scaleX = desiredWidth / backgroundSprite.getLocalBounds().width;
+    float scaleY = desiredHeight / backgroundSprite.getLocalBounds().height;
+
+    // Load the sound buffer from a file
+    sf::SoundBuffer soundBuff;
+    if (!soundBuff.loadFromFile("sounds/slam.wav"))
+    {
+        std::cerr << "Failed to load sound file!" << std::endl;
+        return false;
+    }
+    sf::Sound sound;
+    sound.setBuffer(soundBuff);
+    sound.play();
+
+    // Set the scale of the background sprite
+    backgroundSprite.setScale(scaleX, scaleY);
+    // Set up the text for menu options
+    sf::Text playText;
+    sf::Text exitText;
+
+    playText.setFont(font);
+    playText.setCharacterSize(40);
+    playText.setString("Play");
+    playText.setPosition(420.0f, 250.0f);
+    playText.setFillColor(sf::Color::Green);
+    playText.setOutlineThickness(2.0f); // Border thickness
+
+    exitText.setFont(font);
+    exitText.setCharacterSize(40);
+    exitText.setString("Exit");
+    exitText.setPosition(420.0f, 350.0f);
+    exitText.setFillColor(sf::Color::Red);
+    exitText.setOutlineThickness(2.0f); // Border thickness
+
+    // Game loop for the menu
+    bool playSelected = true; // Indicates which option is currently selected
+    playText.setOutlineColor(sf::Color::Green);
+    exitText.setOutlineColor(sf::Color::Red);
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
+            else if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Up)
+                {
+                    playSelected = true;
+                    playText.setOutlineColor(sf::Color::White);
+                    exitText.setOutlineColor(sf::Color::Red);
+                }
+                else if (event.key.code == sf::Keyboard::Down)
+                {
+                    playSelected = false;
+                    playText.setOutlineColor(sf::Color::Green);
+                    exitText.setOutlineColor(sf::Color::White);
+                }
+                else if (event.key.code == sf::Keyboard::Return)
+                {
+                    window.close();
+                    return playSelected;
+                }
+            }
+        }
+
+        // Clear the window
+        window.clear();
+        // Set the background image
+        window.draw(backgroundSprite);
+        // Draw menu options
+        window.draw(playText);
+        window.draw(exitText);
+
+        // Display the content
+        window.display();
+    }
+
+    return false; // Default to false in case of unexpected closure
+}
+
 // Stores images to textures
 void loadImages(sf::Texture textures[])
 {
@@ -432,6 +541,12 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
 }
 int main()
 {
+    sf::RenderWindow menuWindow(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
+    bool play = showMenu(menuWindow);
+    if (!play)
+    {
+        return 0;
+    }
     static sf::RectangleShape board[8][8];
     static sf::Texture textures[21];
     static sf::Sprite sprites[8][8];
