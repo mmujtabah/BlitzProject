@@ -7,136 +7,15 @@
 // Stores images to textures
 void loadImages(sf::Texture textures[])
 {
-    if (!textures[0].loadFromFile("images/image0.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/image0.png" << std::endl;
-        return;
-    }
-    if (!textures[1].loadFromFile("images/image1.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/image1.png" << std::endl;
-        return;
-    }
-    if (!textures[2].loadFromFile("images/image2.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/image2.png" << std::endl;
-        return;
-    }
-    if (!textures[3].loadFromFile("images/image3.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/image3.png" << std::endl;
-        return;
-    }
-    if (!textures[4].loadFromFile("images/image4.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/image4.png" << std::endl;
-        return;
-    }
-    if (!textures[5].loadFromFile("images/image5.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/image5.png" << std::endl;
-        return;
-    }
-    if (!textures[6].loadFromFile("images/image6.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/image6.png" << std::endl;
-        return;
-    }
-    if (!textures[7].loadFromFile("images/imagefire0.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imagefire0.png" << std::endl;
-        return;
-    }
-    if (!textures[8].loadFromFile("images/imagefire1.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imagefire1.png" << std::endl;
-        return;
-    }
-    if (!textures[9].loadFromFile("images/imagefire2.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imagefire2.png" << std::endl;
-        return;
-    }
-    if (!textures[10].loadFromFile("images/imagefire3.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imagefire3.png" << std::endl;
-        return;
-    }
-    if (!textures[11].loadFromFile("images/imagefire4.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imagefire4.png" << std::endl;
-        return;
-    }
-    if (!textures[12].loadFromFile("images/imagefire5.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imagefire5.png" << std::endl;
-        return;
-    }
-    if (!textures[13].loadFromFile("images/imagefire6.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imagefire6.png" << std::endl;
-        return;
-    }
-    if (!textures[14].loadFromFile("images/imageeffect0.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imageeffect0.png" << std::endl;
-        return;
-    }
-    if (!textures[15].loadFromFile("images/imageeffect1.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imageeffect1.png" << std::endl;
-        return;
-    }
-    if (!textures[16].loadFromFile("images/imageeffect2.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imageeffect2.png" << std::endl;
-        return;
-    }
-    if (!textures[17].loadFromFile("images/imageeffect3.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imageeffect3.png" << std::endl;
-        return;
-    }
-    if (!textures[18].loadFromFile("images/imageeffect4.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imageeffect4.png" << std::endl;
-        return;
-    }
-    if (!textures[19].loadFromFile("images/imageeffect5.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imageeffect5.png" << std::endl;
-        return;
-    }
-    if (!textures[20].loadFromFile("images/imageeffect6.png"))
-    {
-        std::cout << "Failed to load texture: "
-            << "images/imageeffect6.png" << std::endl;
-        return;
-    }
-    // Set the smooth property for the texture
+    
     for (int i = 0; i <= 20; i++)
     {
-        textures[i].setSmooth(true);
+        if (!textures[i].loadFromFile("images/image" + std::to_string(i) + ".png"))
+        {
+            std::cout << "Failed to load texture: " << "images/image" + std::to_string(i) + ".png" << std::endl;
+            return;
+        }
+        textures[i].setSmooth(true);// Set the smooth property for the texture
     }
 }
 
@@ -510,7 +389,7 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                         boardData[i][j] = flameGem(boardData[i][j]);
                     }
 
-                }            
+                }
             }
             if (boardData[i][j] == boardData[i][j + 1] && boardData[i][j] == boardData[i][j + 2]) // Column Check
             {
@@ -535,7 +414,7 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                 boardData[i][j] = rand() % 7;
                 boardData[i][j + 1] = rand() % 7;
                 boardData[i][j + 2] = rand() % 7;
-                if (count > 3) 
+                if (count > 3)
                 {
                     if ((highlightedCol == j || highlightedCol == j + 1 || highlightedCol == j + 2) && highlightedRow == i)
                     {
@@ -545,7 +424,7 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                     {
                         boardData[i][j] = flameGem(boardData[i][j]);
                     }
-                }  
+                }
             }
         }
     }
@@ -769,7 +648,7 @@ int main()
         {
             if (swapped)
             {
-                reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
+                //reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
             }
         }
 
