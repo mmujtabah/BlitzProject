@@ -4,9 +4,11 @@
 #include <iostream>
 #include <iomanip>
 
+bool firstPlay = true;
 
 bool showMenu(sf::RenderWindow& window)
 {
+	firstPlay = false;
 	// Set up the font for text
 	sf::Font font;
 	if (!font.loadFromFile("fonts/menu.ttf"))
@@ -787,14 +789,14 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
 	scoreText.setCharacterSize(40);
 	scoreText.setFillColor(sf::Color::White);
 	scoreText.setString("Score: " + std::to_string(score));
-	scoreText.setPosition(400.0f, 250.0f);
+	scoreText.setPosition(350.0f, 200.0f);
 
 	sf::Text restartText;
 	restartText.setFont(font);
-	restartText.setCharacterSize(30);
+	restartText.setCharacterSize(40);
 	restartText.setFillColor(sf::Color::Green);
 	restartText.setString("Restart Game");
-	restartText.setPosition(400.0f, 350.0f);
+	restartText.setPosition(320.0f, 300.0f);
 	restartText.setOutlineThickness(2.0f);
 
 	sf::Text exitText;
@@ -802,7 +804,7 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
 	exitText.setCharacterSize(40);
 	exitText.setFillColor(sf::Color::Red);
 	exitText.setString("Exit");
-	exitText.setPosition(400.0f, 450.0f);
+	exitText.setPosition(400.0f, 400.0f);
 	exitText.setOutlineThickness(2.0f);
 	bool selected = true;
 	restartText.setOutlineColor(sf::Color::White);
@@ -867,12 +869,14 @@ int main()
 
 
 	menuWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-
-	bool play = showMenu(menuWindow);
-	if (!play)
-	{
-		return 0;
+	if (firstPlay) {
+		bool play = showMenu(menuWindow);
+		if (!play)
+		{
+			return 0;
+		}
 	}
+
 	static sf::RectangleShape board[8][8];
 	static sf::Texture textures[21];
 	static sf::Sprite sprites[8][8];
@@ -1116,9 +1120,11 @@ int main()
 		bool destroyer = specialGemDestroyer(boardData);
 		bool flame = specialGemFlame(boardData);
 		if (destroyer) {
+			score += 50;
 			sound4.play();
 		}
 		if (flame) {
+			score += 20;
 			sound5.play();
 		}
 		// Draw the highlight with transparency and borders
@@ -1149,7 +1155,7 @@ int main()
 		window.display();
 
 		// Exit the program after a delay when time is up
-		if (remainingSeconds == 0 && minutes == 0)
+		if (remainingSeconds == 58 && minutes == 1)
 		{
 			sf::sleep(sf::seconds(2)); // Add a 2-second delay
 			window.close();
