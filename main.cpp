@@ -475,16 +475,16 @@ bool elbowGems(int boardData[][8], int& score, int highlightedRow, int highlight
             }
         }
     }
-    if (soundPlay) 
+    if (soundPlay)
     {
         shiftGemsDown(boardData);
         fillNewGems(boardData);
     }
-    
+
     return soundPlay;
 }
 // Checks for matches on the game board and updates data
-bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highlightedCol)
+bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highlightedCol, bool& flameFound)
 {
     srand(time(0));
     bool flag = false;
@@ -520,10 +520,12 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                     if ((highlightedRow == i || highlightedRow == i + 1 || highlightedRow == i + 2) && highlightedCol == j)
                     {
                         boardData[highlightedRow][highlightedCol] = flameGem(tempValue);
+                        flameFound = true;
                     }
                     else
                     {
                         boardData[i][j] = flameGem(boardData[i][j]);
+                        flameFound = true;
                     }
 
                 }
@@ -556,10 +558,12 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                     if ((highlightedCol == j || highlightedCol == j + 1 || highlightedCol == j + 2) && highlightedRow == i)
                     {
                         boardData[highlightedRow][highlightedCol] = flameGem(tempValue);
+                        flameFound = true;
                     }
                     else
                     {
                         boardData[i][j] = flameGem(boardData[i][j]);
+                        flameFound = true;
                     }
                 }
             }
@@ -570,7 +574,7 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
         shiftGemsDown(boardData);
         fillNewGems(boardData);
     }
-    
+
     return flag;
 }
 
@@ -661,7 +665,7 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
         window.draw(scoreText);
         window.draw(restartText);
         window.draw(exitText);
-        
+
 
         // Display the content
         window.display();
@@ -770,13 +774,13 @@ int main()
         return -1;
     }
     sf::SoundBuffer soundEffect3;
-    if (!soundEffect3.loadFromFile("sounds/sequence2.wav"))
+    if (!soundEffect3.loadFromFile("sounds/flame.wav"))
     {
         std::cerr << "Failed to load sound file!" << std::endl;
         return -1;
     }
     sf::SoundBuffer soundEffect4;
-    if (!soundEffect4.loadFromFile("sounds/sequence3.wav"))
+    if (!soundEffect4.loadFromFile("sounds/destroyer.wav"))
     {
         std::cerr << "Failed to load sound file!" << std::endl;
         return -1;
@@ -889,9 +893,9 @@ int main()
         window.draw(timeText);
         window.draw(scoreText);
         window.draw(gameInfo);
-
+        bool flameFound = false;
         bool destroyerGem = elbowGems(boardData, score, highlightedRow, highlightedCol);
-        bool matchGems = checkBoard(boardData, score, highlightedRow, highlightedCol);
+        bool matchGems = checkBoard(boardData, score, highlightedRow, highlightedCol, flameFound);
 
         if (destroyerGem || matchGems)
         {
@@ -899,7 +903,11 @@ int main()
             {
                 sound3.play();
             }
-            if (matchGems)
+            if (flameFound)
+            {
+                sound2.play();
+            }
+            else if (matchGems)
             {
                 sound1.play();
             }
