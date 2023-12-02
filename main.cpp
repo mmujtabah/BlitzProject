@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 
+
 bool showMenu(sf::RenderWindow& window)
 {
     // Set up the font for text
@@ -64,7 +65,7 @@ bool showMenu(sf::RenderWindow& window)
 
     // Game loop for the menu
     bool playSelected = true; // Indicates which option is currently selected
-    playText.setOutlineColor(sf::Color::Green);
+    playText.setOutlineColor(sf::Color::White);
     exitText.setOutlineColor(sf::Color::Red);
 
     while (window.isOpen())
@@ -116,7 +117,7 @@ bool showMenu(sf::RenderWindow& window)
 // Stores images to textures
 void loadImages(sf::Texture textures[])
 {
-    
+
     for (int i = 0; i <= 20; i++)
     {
         if (!textures[i].loadFromFile("images/image" + std::to_string(i) + ".png"))
@@ -539,9 +540,98 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
     }
     return flag;
 }
+
+bool showGameOverMenu(sf::RenderWindow& window, int score) {
+    sf::Font font;
+    if (!font.loadFromFile("fonts/font.ttf")) {
+        std::cerr << "Failed to load font!" << std::endl;
+        return false;
+    }
+
+    sf::Text scoreText;
+    scoreText.setFont(font);
+    scoreText.setCharacterSize(30);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setString("Score: " + std::to_string(score));
+    scoreText.setPosition(400.0f, 250.0f);
+
+    sf::Text restartText;
+    restartText.setFont(font);
+    restartText.setCharacterSize(30);
+    restartText.setFillColor(sf::Color::Green);
+    restartText.setString("Restart Game");
+    restartText.setPosition(400.0f, 350.0f);
+    restartText.setOutlineThickness(2.0f);
+
+    sf::Text exitText;
+    exitText.setFont(font);
+    exitText.setCharacterSize(30);
+    exitText.setFillColor(sf::Color::Red);
+    exitText.setString("Exit");
+    exitText.setPosition(400.0f, 450.0f);
+    exitText.setOutlineThickness(2.0f);
+    bool selected = true;
+    restartText.setOutlineColor(sf::Color::White);
+    exitText.setOutlineColor(sf::Color::Red);
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return false;
+            }
+            else if (event.type == sf::Event::KeyPressed) {
+                // Move selector with arrow keys
+                if (event.key.code == sf::Keyboard::Up) {
+                    restartText.setOutlineColor(sf::Color::White);
+                    exitText.setOutlineColor(sf::Color::Red);
+                    selected = true;
+                }
+                else if (event.key.code == sf::Keyboard::Down) {
+                    restartText.setOutlineColor(sf::Color::Green);
+                    exitText.setOutlineColor(sf::Color::White);
+                    selected = false;
+                }
+                else if (event.key.code == sf::Keyboard::Return) {
+                    // Check if the cursor is over "Restart Game" or "Exit"
+                    window.close();
+                    return selected;
+                }
+            }
+        }
+
+        // Clear the window
+        window.clear();
+
+        // Draw menu options
+        window.draw(scoreText);
+        window.draw(restartText);
+        window.draw(exitText);
+
+        // Display the content
+        window.display();
+    }
+
+    return false; // Default to false in case of unexpected closure
+}
+
 int main()
 {
     sf::RenderWindow menuWindow(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
+    menuWindow.setFramerateLimit(60);
+    // Load the icon image
+    sf::Image icon;
+    if (!icon.loadFromFile("images/icon.jpg"))
+    {
+        std::cout << "Failed to load icon.png";
+        return -1;
+    }
+    // Set the window icon
+
+
+    menuWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
     bool play = showMenu(menuWindow);
     if (!play)
     {
@@ -557,6 +647,7 @@ int main()
 
     // Set up the window
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
+    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     window.setFramerateLimit(60);
 
 
@@ -763,7 +854,7 @@ int main()
         {
             if (swapped)
             {
-                //reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
+                reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
             }
         }
 
@@ -800,6 +891,13 @@ int main()
         {
             sf::sleep(sf::seconds(2)); // Add a 2-second delay
             window.close();
+            sf::RenderWindow gameOver(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
+            gameOver.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+            gameOver.setFramerateLimit(60);
+            if (showGameOverMenu(gameOver, score))
+            {
+                main();
+            }
         }
     }
     return 0;
