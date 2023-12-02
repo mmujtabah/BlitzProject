@@ -341,6 +341,27 @@ void reverseSwapData(int boardData[][8], int& highlightedRow, int& highlightedCo
         }
     }
 }
+void shiftGemsDown(int board[][8]) {
+    for (int j = 0; j < 8; j++) {
+        int count = 0;
+        for (int i = 8 - 1; i >= 0; i--) {
+            if (board[i][j] != -1) {
+                std::swap(board[i][j], board[8 - 1 - count][j]);
+                count++;
+            }
+        }
+    }
+}
+
+void fillNewGems(int board[][8]) {
+    for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < 8; i++) {
+            if (board[i][j] == -1) {
+                board[i][j] = rand() % 7;
+            }
+        }
+    }
+}
 
 // Destroyer gem check
 bool checkElbowGems(int boardData[][8], int row, int col, int highlightedRow, int highlightedCol)
@@ -353,11 +374,11 @@ bool checkElbowGems(int boardData[][8], int row, int col, int highlightedRow, in
         boardData[row][col] == boardData[row + 1][col + 2] &&
         boardData[row][col] == boardData[row + 2][col + 2])
     {
-        boardData[row + 2][col + 2] = rand() % 7;
-        boardData[row][col] = rand() % 7;
-        boardData[row][col + 1] = rand() % 7;
-        boardData[row][col + 2] = rand() % 7;
-        boardData[row + 1][col + 2] = rand() % 7;
+        boardData[row + 2][col + 2] = -1;
+        boardData[row][col] = -1;
+        boardData[row][col + 1] = -1;
+        boardData[row][col + 2] = -1;
+        boardData[row + 1][col + 2] = -1;
         if ((highlightedRow == row || highlightedRow == row + 1 || highlightedRow == row + 2) && (highlightedCol == col || highlightedCol == col + 1 || highlightedCol == col + 2))
         {
             boardData[highlightedRow][highlightedCol] = destroyerGem(tempValue);
@@ -375,11 +396,11 @@ bool checkElbowGems(int boardData[][8], int row, int col, int highlightedRow, in
         boardData[row][col] == boardData[row][col + 1] &&
         boardData[row][col] == boardData[row][col + 2])
     {
-        boardData[row][col + 2] = rand() % 7;
-        boardData[row][col] = rand() % 7;
-        boardData[row][col + 1] = rand() % 7;
-        boardData[row + 1][col] = rand() % 7;
-        boardData[row + 2][col] = rand() % 7;
+        boardData[row][col + 2] = -1;
+        boardData[row][col] = -1;
+        boardData[row][col + 1] = -1;
+        boardData[row + 1][col] = -1;
+        boardData[row + 2][col] = -1;
         if ((highlightedRow == row || highlightedRow == row + 1 || highlightedRow == row + 2) && (highlightedCol == col || highlightedCol == col + 1 || highlightedCol == col + 2))
         {
             boardData[highlightedRow][highlightedCol] = destroyerGem(tempValue);
@@ -398,11 +419,11 @@ bool checkElbowGems(int boardData[][8], int row, int col, int highlightedRow, in
         boardData[row][col] == boardData[row][col + 1] &&
         boardData[row][col] == boardData[row][col + 2])
     {
-        boardData[row][col + 2] = rand() % 7;
-        boardData[row][col] = rand() % 7;
-        boardData[row][col + 1] = rand() % 7;
-        boardData[row - 1][col] = rand() % 7;
-        boardData[row - 2][col] = rand() % 7;
+        boardData[row][col + 2] = -1;
+        boardData[row][col] = -1;
+        boardData[row][col + 1] = -1;
+        boardData[row - 1][col] = -1;
+        boardData[row - 2][col] = -1;
         if ((highlightedRow == row || highlightedRow == row - 1 || highlightedRow == row - 2) && (highlightedCol == col || highlightedCol == col + 1 || highlightedCol == col + 2))
         {
             boardData[highlightedRow][highlightedCol] = destroyerGem(tempValue);
@@ -420,11 +441,11 @@ bool checkElbowGems(int boardData[][8], int row, int col, int highlightedRow, in
         boardData[row][col] == boardData[row][col - 1] &&
         boardData[row][col] == boardData[row][col - 2])
     {
-        boardData[row][col] = rand() % 7;
-        boardData[row - 1][col] = rand() % 7;
-        boardData[row - 2][col] = rand() % 7;
-        boardData[row][col - 1] = rand() % 7;
-        boardData[row][col - 2] = rand() % 7;
+        boardData[row][col] = -1;
+        boardData[row - 1][col] = -1;
+        boardData[row - 2][col] = -1;
+        boardData[row][col - 1] = -1;
+        boardData[row][col - 2] = -1;
         if ((highlightedRow == row || highlightedRow == row - 1 || highlightedRow == row - 2) && (highlightedCol == col || highlightedCol == col - 1 || highlightedCol == col - 2))
         {
             boardData[highlightedRow][highlightedCol] = destroyerGem(tempValue);
@@ -454,6 +475,12 @@ bool elbowGems(int boardData[][8], int& score, int highlightedRow, int highlight
             }
         }
     }
+    if (soundPlay) 
+    {
+        shiftGemsDown(boardData);
+        fillNewGems(boardData);
+    }
+    
     return soundPlay;
 }
 // Checks for matches on the game board and updates data
@@ -476,7 +503,7 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                 {
                     if (boardData[i][j] == boardData[k][j])
                     {
-                        boardData[k][j] = rand() % 7;
+                        boardData[k][j] = -1;
                         score += 50;
                         count++;
                     }
@@ -485,9 +512,9 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                         break;
                     }
                 }
-                boardData[i][j] = rand() % 7;
-                boardData[i + 1][j] = rand() % 7;
-                boardData[i + 2][j] = rand() % 7;
+                boardData[i][j] = -1;
+                boardData[i + 1][j] = -1;
+                boardData[i + 2][j] = -1;
                 if (count > 3)
                 {
                     if ((highlightedRow == i || highlightedRow == i + 1 || highlightedRow == i + 2) && highlightedCol == j)
@@ -512,7 +539,7 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                 {
                     if (boardData[i][j] == boardData[i][k])
                     {
-                        boardData[i][k] = rand() % 7;
+                        boardData[i][k] = -1;
                         score += 50;
                         count++;
                     }
@@ -521,9 +548,9 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
                         break;
                     }
                 }
-                boardData[i][j] = rand() % 7;
-                boardData[i][j + 1] = rand() % 7;
-                boardData[i][j + 2] = rand() % 7;
+                boardData[i][j] = -1;
+                boardData[i][j + 1] = -1;
+                boardData[i][j + 2] = -1;
                 if (count > 3)
                 {
                     if ((highlightedCol == j || highlightedCol == j + 1 || highlightedCol == j + 2) && highlightedRow == i)
@@ -538,6 +565,12 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
             }
         }
     }
+    if (flag)
+    {
+        shiftGemsDown(boardData);
+        fillNewGems(boardData);
+    }
+    
     return flag;
 }
 
@@ -548,9 +581,28 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
         return false;
     }
 
+    // Load the image into a texture
+    sf::Texture backgroundImage;
+    if (!backgroundImage.loadFromFile("images/bg2.jpg"))
+    {
+        // Handle the case where the image cannot be loaded
+        return false;
+    }
+    // Create a sprite and set its texture to the loaded image
+    sf::Sprite backgroundSprite(backgroundImage);
+
+    // Set the desired size for the background image
+    float desiredWidth = 1000.0f;  // Adjust to your desired width
+    float desiredHeight = 600.0f;  // Adjust to your desired height
+
+    // Calculate the scaling factors for width and height
+    float scaleX = desiredWidth / backgroundSprite.getLocalBounds().width;
+    float scaleY = desiredHeight / backgroundSprite.getLocalBounds().height;
+    backgroundSprite.setScale(scaleX, scaleY);
+
     sf::Text scoreText;
     scoreText.setFont(font);
-    scoreText.setCharacterSize(30);
+    scoreText.setCharacterSize(40);
     scoreText.setFillColor(sf::Color::White);
     scoreText.setString("Score: " + std::to_string(score));
     scoreText.setPosition(400.0f, 250.0f);
@@ -565,7 +617,7 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
 
     sf::Text exitText;
     exitText.setFont(font);
-    exitText.setCharacterSize(30);
+    exitText.setCharacterSize(40);
     exitText.setFillColor(sf::Color::Red);
     exitText.setString("Exit");
     exitText.setPosition(400.0f, 450.0f);
@@ -605,9 +657,11 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
         window.clear();
 
         // Draw menu options
+        window.draw(backgroundSprite);
         window.draw(scoreText);
         window.draw(restartText);
         window.draw(exitText);
+        
 
         // Display the content
         window.display();
@@ -857,7 +911,6 @@ int main()
                 reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
             }
         }
-
         drawBoard(window, boardData, textures, board);
         // Draw the highlight with transparency and borders
         sf::RectangleShape highlight;
