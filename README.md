@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a Bltiz Bejeweled remake implemented in C++ using the SFML library. The game involves swapping adjacent gems to create matches of three or more gems of the same type in a row or column.
+This is a Bejeweled Bltiz remake implemented in C++ using the SFML library. The game involves swapping adjacent gems to create matches of three or more gems of the same type in a row or column.
 
 ## Features
 
