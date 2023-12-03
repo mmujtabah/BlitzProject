@@ -9,7 +9,7 @@ This is a Bltiz Bejeweled remake implemented in C++ using the SFML library. The 
 - **Gem Matching:** Swap adjacent gems to create matches of three or more of the same color.
 - **Special Gems:**
   - **Flame Gems:** Created by making four or more gems of the same color consecutively. Triggered by including them in a match to clear surrounding gems.
-  - **Destroyer Gems:** Gems with a value of 14 or greater can explode and clear their entire row and column. Created when making five gems in an elbow shape.
+  - **Destroyer Gems:** Created when making five gems in an elbow shape. This gem can explode when triggered by including them in a match to clear surrounding gems and it will clear their entire row and column.
 - **Shuffling Gems:** Press 'R' to shuffle gems when no match is being made.
 - **Sound Effects:** Enjoy interactive sound effects when making matches or triggering special gems.
 - **Scoring System:** Earn points for each match, and score bonus points for special gem actions.
