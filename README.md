@@ -24,7 +24,7 @@ This is a Bltiz Bejeweled remake implemented in C++ using the SFML library. The 
 ### Installation
 
 1. Clone the repository: `git clone https://github.com/mmujtabah/BlitzProject.git`
-2. Compile the source code: `g++ -o main main.cpp -lsfml-graphics -lsfml-window -lsfml-system`
+2. Compile the source code: `g++ -o main main.cpp -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio`
 
 ### Usage
 
