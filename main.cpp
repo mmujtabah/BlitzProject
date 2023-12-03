@@ -54,14 +54,14 @@ bool showMenu(sf::RenderWindow& window)
 	playText.setFont(font);
 	playText.setCharacterSize(40);
 	playText.setString("Play");
-	playText.setPosition(420.0f, 250.0f);
+	playText.setPosition(410.0f, 240.0f);
 	playText.setFillColor(sf::Color::Green);
 	playText.setOutlineThickness(2.0f); // Border thickness
 
 	exitText.setFont(font);
 	exitText.setCharacterSize(40);
 	exitText.setString("Exit");
-	exitText.setPosition(420.0f, 350.0f);
+	exitText.setPosition(410.0f, 340.0f);
 	exitText.setFillColor(sf::Color::Red);
 	exitText.setOutlineThickness(2.0f); // Border thickness
 
@@ -789,14 +789,14 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
 	scoreText.setCharacterSize(40);
 	scoreText.setFillColor(sf::Color::White);
 	scoreText.setString("Score: " + std::to_string(score));
-	scoreText.setPosition(350.0f, 200.0f);
+	scoreText.setPosition(350.0f, 180.0f);
 
 	sf::Text restartText;
 	restartText.setFont(font);
 	restartText.setCharacterSize(40);
 	restartText.setFillColor(sf::Color::Green);
 	restartText.setString("Restart Game");
-	restartText.setPosition(320.0f, 300.0f);
+	restartText.setPosition(320.0f, 280.0f);
 	restartText.setOutlineThickness(2.0f);
 
 	sf::Text exitText;
@@ -804,7 +804,7 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
 	exitText.setCharacterSize(40);
 	exitText.setFillColor(sf::Color::Red);
 	exitText.setString("Exit");
-	exitText.setPosition(400.0f, 400.0f);
+	exitText.setPosition(400.0f, 380.0f);
 	exitText.setOutlineThickness(2.0f);
 	bool selected = true;
 	restartText.setOutlineColor(sf::Color::White);
@@ -1155,7 +1155,7 @@ int main()
 		window.display();
 
 		// Exit the program after a delay when time is up
-		if (remainingSeconds == 58 && minutes == 1)
+		if (remainingSeconds == 0 && minutes == 0)
 		{
 			sf::sleep(sf::seconds(2)); // Add a 2-second delay
 			window.close();
