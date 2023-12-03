@@ -19,16 +19,16 @@ This is a simple Match-3 puzzle game implemented in C++ using the SFML library. 
 ### Prerequisites
 
 - C++ compiler
-- SFML library (version X.X.X)
+- SFML library (version 2.6.1)
 
 ### Installation
 
 1. Clone the repository: `git clone https://github.com/mmujtabah/BlitzProject.git`
-2. Compile the source code: `g++ -o match3 main.cpp -lsfml-graphics -lsfml-window -lsfml-system`
+2. Compile the source code: `g++ -o main main.cpp -lsfml-graphics -lsfml-window -lsfml-system`
 
 ### Usage
 
-Run the compiled executable: `./match3`
+Run the compiled executable: `./main`
 
 ## Gameplay
 
@@ -43,9 +43,8 @@ Run the compiled executable: `./match3`
 
 ## Code Structure
 
-- `main.cpp`: Main game logic and entry point.
-- `board.cpp` and `board.h`: Implementation of the game board and gem-related functions.
-- `sound.cpp` and `sound.h`: Handling sound effects.
+- `main.cpp`: Code.
+
 
 ## Acknowledgments
 
