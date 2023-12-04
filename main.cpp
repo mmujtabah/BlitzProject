@@ -1,8 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <cstdlib>
 #include <iostream>
-#include <iomanip>
+#include <fstream>
+
 
 bool firstPlay = true;
 
@@ -1089,12 +1089,21 @@ int main()
 		window.draw(timeText);
 		window.draw(scoreText);
 		window.draw(gameInfo);
-		
+		bool destroyer = specialGemDestroyer(boardData);
+		bool flame = specialGemFlame(boardData);
+		if (destroyer) {
+			score += 50;
+			sound4.play();
+		}
+		if (flame) {
+			score += 20;
+			sound5.play();
+		}
 		bool flameFound = false;
 		bool destroyerGem = elbowGems(boardData, score, highlightedRow, highlightedCol);
 		bool matchGems = checkBoard(boardData, score, highlightedRow, highlightedCol, flameFound);
 		
-		if (destroyerGem || matchGems)
+		if (destroyerGem || matchGems || destroyer || flame)
 		{
 			if (destroyerGem)
 			{
@@ -1117,16 +1126,7 @@ int main()
 			}
 		}
 		drawBoard(window, boardData, textures, board);
-		bool destroyer = specialGemDestroyer(boardData);
-		bool flame = specialGemFlame(boardData);
-		if (destroyer) {
-			score += 50;
-			sound4.play();
-		}
-		if (flame) {
-			score += 20;
-			sound5.play();
-		}
+		
 		// Draw the highlight with transparency and borders
 		sf::RectangleShape highlight;
 		highlight.setSize(sf::Vector2f(cellSize, cellSize));
