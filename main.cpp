@@ -1091,20 +1091,20 @@ int main()
 		window.draw(gameInfo);
 		bool destroyer = specialGemDestroyer(boardData);
 		bool flame = specialGemFlame(boardData);
-		if (destroyer) {
-			score += 50;
-			sound4.play();
-		}
-		if (flame) {
-			score += 20;
-			sound5.play();
-		}
 		bool flameFound = false;
 		bool destroyerGem = elbowGems(boardData, score, highlightedRow, highlightedCol);
 		bool matchGems = checkBoard(boardData, score, highlightedRow, highlightedCol, flameFound);
 		
 		if (destroyerGem || matchGems || destroyer || flame)
 		{
+			if (destroyer) {
+				score += 50;
+				sound4.play();
+			}
+			if (flame) {
+				score += 20;
+				sound5.play();
+			}
 			if (destroyerGem)
 			{
 				sound3.play();
@@ -1113,7 +1113,7 @@ int main()
 			{
 				sound2.play();
 			}
-			else if (matchGems)
+			if (matchGems)
 			{
 				sound1.play();
 			}
