@@ -5,7 +5,7 @@
 
 
 bool firstPlay = true;
-
+// Game menu for exit and and play
 bool showMenu(sf::RenderWindow& window)
 {
 	firstPlay = false;
@@ -343,6 +343,7 @@ void reverseSwapData(int boardData[][8], int& highlightedRow, int& highlightedCo
 		}
 	}
 }
+// Shift gems down after s swap to fill empty space
 void shiftGemsDown(int board[][8]) {
 	for (int j = 0; j < 8; j++) {
 		int count = 0;
@@ -355,6 +356,7 @@ void shiftGemsDown(int board[][8]) {
 	}
 }
 
+// Fills new gems at the top after the shiftGemsDown function has been performed
 void fillNewGems(int board[][8]) {
 	for (int j = 0; j < 8; j++) {
 		for (int i = 0; i < 8; i++) {
@@ -461,7 +463,7 @@ bool checkElbowGems(int boardData[][8], int row, int col, int highlightedRow, in
 	}
 	return false;
 }
-
+// Destroyer gem explosion
 bool specialGemDestroyer(int boardData[][8])
 {
 	bool sound = false;
@@ -478,21 +480,21 @@ bool specialGemDestroyer(int boardData[][8])
 				// Check in the row for consecutive gems of the same color
 				bool consecutiveRow = false;
 				if (j + 1 < 8 && j + 2 < 8) {
-					if (boardData[i][j + 1] == color && boardData[i][j + 2] == color) {
+					if ((boardData[i][j + 1]) % 7 == color && (boardData[i][j + 2]) % 7 == color) {
 						consecutiveRow = true;
 					}
 					else if (j - 1 >= 0) {
-						if (boardData[i][j - 1] == color && boardData[i][j + 1] == color) {
+						if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j + 1]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
 				}
 				else if (j - 1 >= 0 && j - 2 >= 0) {
-					if (boardData[i][j - 1] == color && boardData[i][j - 2] == color) {
+					if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j - 2]) % 7 == color) {
 						consecutiveRow = true;
 					}
 					else if (j + 1 < 8) {
-						if (boardData[i][j - 1] == color && boardData[i][j + 1] == color) {
+						if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j + 1]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
@@ -500,21 +502,21 @@ bool specialGemDestroyer(int boardData[][8])
 				// Check in the column for consecutive gems of the same color
 				bool consecutiveCol = false;
 				if (i + 1 < 8 && i + 2 < 8) {
-					if (boardData[i + 1][j] == color && boardData[i + 2][j] == color) {
+					if ((boardData[i + 1][j]) % 7 == color && (boardData[i + 2][j]) % 7 == color) {
 						consecutiveRow = true;
 					}
 					else if (i - 1 >= 0) {
-						if (boardData[i - 1][j] == color && boardData[i + 1][j] == color) {
+						if ((boardData[i - 1][j]) % 7 == color && (boardData[i + 1][j]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
 				}
 				else if (i - 1 >= 0 && i - 2 >= 0) {
-					if (boardData[i - 1][j] == color && boardData[i - 2][j] == color) {
+					if ((boardData[i - 1][j]) % 7 == color && (boardData[i - 2][j]) % 7 == color) {
 						consecutiveRow = true;
 					}
 					else if (i + 1 < 8) {
-						if (boardData[i - 1][j] == color && boardData[i + 1][j] == color) {
+						if ((boardData[i - 1][j]) % 7 == color && (boardData[i + 1][j]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
@@ -540,7 +542,7 @@ bool specialGemDestroyer(int boardData[][8])
 	fillNewGems(boardData);
 	return sound;
 }
-
+// Flame gem explosion
 bool specialGemFlame(int boardData[][8])
 {
 	bool sound = false;
@@ -557,21 +559,21 @@ bool specialGemFlame(int boardData[][8])
 				// Check in the row for consecutive gems of the same color
 				bool consecutiveRow = false;
 				if (j + 1 < 8 && j + 2 < 8) {
-					if (boardData[i][j + 1] == color && boardData[i][j + 2] == color) {
+					if ((boardData[i][j + 1]) % 7 == color && (boardData[i][j + 2]) % 7 == color) {
 						consecutiveRow = true;
 					}
 					else if (j - 1 >= 0) {
-						if (boardData[i][j - 1] == color && boardData[i][j + 1] == color) {
+						if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j + 1]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
 				}
 				else if (j - 1 >= 0 && j - 2 >= 0) {
-					if (boardData[i][j - 1] == color && boardData[i][j - 2] == color) {
+					if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j - 2]) % 7 == color) {
 						consecutiveRow = true;
 					}
 					else if (j + 1 < 8) {
-						if (boardData[i][j - 1] == color && boardData[i][j + 1] == color) {
+						if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j + 1]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
@@ -579,21 +581,21 @@ bool specialGemFlame(int boardData[][8])
 				// Check in the column for consecutive gems of the same color
 				bool consecutiveCol = false;
 				if (i + 1 < 8 && i + 2 < 8) {
-					if (boardData[i + 1][j] == color && boardData[i + 2][j] == color) {
+					if ((boardData[i + 1][j]) % 7 == color && (boardData[i + 2][j]) % 7 == color) {
 						consecutiveRow = true;
 					}
 					else if (i - 1 >= 0) {
-						if (boardData[i - 1][j] == color && boardData[i + 1][j] == color) {
+						if ((boardData[i - 1][j]) % 7 == color && (boardData[i + 1][j]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
 				}
 				else if (i - 1 >= 0 && i - 2 >= 0) {
-					if (boardData[i - 1][j] == color && boardData[i - 2][j] == color) {
+					if ((boardData[i - 1][j]) % 7 == color && (boardData[i - 2][j]) % 7 == color) {
 						consecutiveRow = true;
 					}
 					else if (i + 1 < 8) {
-						if (boardData[i - 1][j] == color && boardData[i + 1][j] == color) {
+						if ((boardData[i - 1][j]) % 7 == color && (boardData[i + 1][j]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
@@ -757,7 +759,7 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
 	}
 	return flag;
 }
-
+// Game over menu to exit or restart game
 bool showGameOverMenu(sf::RenderWindow& window, int score) {
 	char filescore[100];
 	std::ifstream file("file.txt");
@@ -926,6 +928,7 @@ int main()
 	// Set up the text for time, score, title and info
 	sf::Text timeText;
 	sf::Text scoreText;
+	sf::Text shuffleText;
 	sf::Text gameTitle;
 	sf::Text gameInfo;
 
@@ -936,6 +939,10 @@ int main()
 	timeText.setFont(font);
 	timeText.setCharacterSize(35);
 	timeText.setFillColor(sf::Color::White);
+
+	shuffleText.setFont(font);
+	shuffleText.setCharacterSize(25);
+	shuffleText.setFillColor(sf::Color::White);
 
 	scoreText.setFont(font);
 	scoreText.setCharacterSize(35);
@@ -1085,6 +1092,7 @@ int main()
 		// Update text
 		gameTitle.setString("Crytsal Crush Saga");
 		timeText.setString("Time Left: " + std::to_string(minutes) + ":" + std::to_string(remainingSeconds) + " s");
+		shuffleText.setString("Press R to shuffle gems");
 		scoreText.setString("Score: " + std::to_string(score));
 		gameInfo.setString("Game developed by M.Mujtaba and Harris Tabassum");
 
@@ -1092,6 +1100,7 @@ int main()
 		gameTitle.setPosition(10.0f, 45.0f);  // Adjust as needed
 		timeText.setPosition(10.0f, 220.0f);  // Adjust as needed
 		scoreText.setPosition(10.0f, 320.0f); // Adjust as needed
+		shuffleText.setPosition(10.0f, 420.0f);  // Adjust as needed
 		gameInfo.setPosition(50.0f, 550.0f);  // Adjust as needed
 
 		// Clear the window
@@ -1104,6 +1113,7 @@ int main()
 		window.draw(gameTitle);
 		window.draw(timeText);
 		window.draw(scoreText);
+		window.draw(shuffleText);
 		window.draw(gameInfo);
 		bool destroyer = specialGemDestroyer(boardData);
 		bool flame = specialGemFlame(boardData);
