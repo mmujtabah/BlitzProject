@@ -553,8 +553,8 @@ bool specialGemFlame(int boardData[][8])
 			int temp = boardData[i][j];
 			if (temp >= 7 && temp < 14)
 			{
-				// Check if it's a destroyer gem
-				int color = temp % 7; // Get the color of the destroyer gem
+				// Check if it's a flame gem
+				int color = temp % 7; // Get the color of the flame gem
 
 				// Check in the row for consecutive gems of the same color
 				bool consecutiveRow = false;
@@ -582,21 +582,21 @@ bool specialGemFlame(int boardData[][8])
 				bool consecutiveCol = false;
 				if (i + 1 < 8 && i + 2 < 8) {
 					if ((boardData[i + 1][j]) % 7 == color && (boardData[i + 2][j]) % 7 == color) {
-						consecutiveRow = true;
+						consecutiveCol = true;
 					}
 					else if (i - 1 >= 0) {
 						if ((boardData[i - 1][j]) % 7 == color && (boardData[i + 1][j]) % 7 == color) {
-							consecutiveRow = true;
+							consecutiveCol = true;
 						}
 					}
 				}
 				else if (i - 1 >= 0 && i - 2 >= 0) {
 					if ((boardData[i - 1][j]) % 7 == color && (boardData[i - 2][j]) % 7 == color) {
-						consecutiveRow = true;
+						consecutiveCol = true;
 					}
 					else if (i + 1 < 8) {
 						if ((boardData[i - 1][j]) % 7 == color && (boardData[i + 1][j]) % 7 == color) {
-							consecutiveRow = true;
+							consecutiveCol = true;
 						}
 					}
 				}
@@ -885,7 +885,6 @@ int main()
 	}
 	// Set the window icon
 
-
 	menuWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	if (firstPlay) {
 		bool play = showMenu(menuWindow);
@@ -897,10 +896,9 @@ int main()
 
 	static sf::RectangleShape board[8][8];
 	static sf::Texture textures[21];
-	static sf::Sprite sprites[8][8];
 	int highlightedRow = 0;
 	int highlightedCol = 0;
-	int boardData[8][8]{ 0 };   // Create a 2D array to store the board data
+	int boardData[8][8]{ 0 };  // Create a 2D array to store the board data
 	randboardData(boardData); // Randomize the board data
 
 	// Set up the window
