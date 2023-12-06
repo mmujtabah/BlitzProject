@@ -1146,7 +1146,7 @@ int main()
 		{
 			if (swapped)
 			{
-				//reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
+				reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
 			}
 		}
 		drawBoard(window, boardData, textures, board);
