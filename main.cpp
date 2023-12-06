@@ -483,17 +483,17 @@ bool specialGemDestroyer(int boardData[][8])
 					if ((boardData[i][j + 1]) % 7 == color && (boardData[i][j + 2]) % 7 == color) {
 						consecutiveRow = true;
 					}
-					else if (j - 1 >= 0) {
+					if (j - 1 >= 0) {
 						if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j + 1]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
 				}
-				else if (j - 1 >= 0 && j - 2 >= 0) {
+				if (j - 1 >= 0 && j - 2 >= 0) {
 					if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j - 2]) % 7 == color) {
 						consecutiveRow = true;
 					}
-					else if (j + 1 < 8) {
+					if (j + 1 < 8) {
 						if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j + 1]) % 7 == color) {
 							consecutiveRow = true;
 						}
@@ -505,13 +505,13 @@ bool specialGemDestroyer(int boardData[][8])
 					if ((boardData[i + 1][j]) % 7 == color && (boardData[i + 2][j]) % 7 == color) {
 						consecutiveRow = true;
 					}
-					else if (i - 1 >= 0) {
+					if (i - 1 >= 0) {
 						if ((boardData[i - 1][j]) % 7 == color && (boardData[i + 1][j]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
 				}
-				else if (i - 1 >= 0 && i - 2 >= 0) {
+				if (i - 1 >= 0 && i - 2 >= 0) {
 					if ((boardData[i - 1][j]) % 7 == color && (boardData[i - 2][j]) % 7 == color) {
 						consecutiveRow = true;
 					}
@@ -562,13 +562,13 @@ bool specialGemFlame(int boardData[][8])
 					if ((boardData[i][j + 1]) % 7 == color && (boardData[i][j + 2]) % 7 == color) {
 						consecutiveRow = true;
 					}
-					else if (j - 1 >= 0) {
+					if (j - 1 >= 0) {
 						if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j + 1]) % 7 == color) {
 							consecutiveRow = true;
 						}
 					}
 				}
-				else if (j - 1 >= 0 && j - 2 >= 0) {
+				if (j - 1 >= 0 && j - 2 >= 0) {
 					if ((boardData[i][j - 1]) % 7 == color && (boardData[i][j - 2]) % 7 == color) {
 						consecutiveRow = true;
 					}
@@ -584,17 +584,17 @@ bool specialGemFlame(int boardData[][8])
 					if ((boardData[i + 1][j]) % 7 == color && (boardData[i + 2][j]) % 7 == color) {
 						consecutiveCol = true;
 					}
-					else if (i - 1 >= 0) {
+					if (i - 1 >= 0) {
 						if ((boardData[i - 1][j]) % 7 == color && (boardData[i + 1][j]) % 7 == color) {
 							consecutiveCol = true;
 						}
 					}
 				}
-				else if (i - 1 >= 0 && i - 2 >= 0) {
+				if (i - 1 >= 0 && i - 2 >= 0) {
 					if ((boardData[i - 1][j]) % 7 == color && (boardData[i - 2][j]) % 7 == color) {
 						consecutiveCol = true;
 					}
-					else if (i + 1 < 8) {
+					if (i + 1 < 8) {
 						if ((boardData[i - 1][j]) % 7 == color && (boardData[i + 1][j]) % 7 == color) {
 							consecutiveCol = true;
 						}
@@ -767,7 +767,7 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
 	int scoreNum = std::atoi(filescore);
 	file.close();
 	std::ofstream readFile("file.txt");
-	if (score > scoreNum) { readFile << score; }
+	if (score > scoreNum) { readFile << score; scoreNum = score; }
 	readFile.close();
 	sf::Font font;
 	if (!font.loadFromFile("fonts/menu.ttf")) {
@@ -1146,7 +1146,7 @@ int main()
 		{
 			if (swapped)
 			{
-				reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
+				//reverseSwapData(boardData, highlightedRow, highlightedCol, event.key.code);
 			}
 		}
 		drawBoard(window, boardData, textures, board);
