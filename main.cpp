@@ -1178,7 +1178,7 @@ int main()
 		window.display();
 
 		// Exit the program after a delay when time is up
-		if (remainingSeconds == 58 && minutes == 1)
+		if (remainingSeconds == 0 && minutes == 0)
 		{
 			sf::sleep(sf::seconds(2)); // Add a 2-second delay
 			window.close();
