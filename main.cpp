@@ -761,13 +761,13 @@ bool checkBoard(int boardData[][8], int& score, int highlightedRow, int highligh
 }
 // Game over menu to exit or restart game
 bool showGameOverMenu(sf::RenderWindow& window, int score) {
-	char filescore[100];
+	int filescore = 0;
 	std::ifstream file("file.txt");
-	file.get(filescore, 100);
-	int scoreNum = std::atoi(filescore);
+	file >> filescore;
 	file.close();
 	std::ofstream readFile("file.txt");
-	if (score > scoreNum) { readFile << score; scoreNum = score; }
+	if (score > filescore) { filescore = score; }
+	readFile << filescore;
 	readFile.close();
 	sf::Font font;
 	if (!font.loadFromFile("fonts/menu.ttf")) {
@@ -798,7 +798,7 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
 	highscore.setFont(font);
 	highscore.setCharacterSize(40);
 	highscore.setFillColor(sf::Color::White);
-	highscore.setString("Highscore: " + std::to_string(scoreNum));
+	highscore.setString("Highscore: " + std::to_string(filescore));
 	highscore.setPosition(200.0f, 120.0f);
 
 	sf::Text scoreText;
@@ -1178,16 +1178,16 @@ int main()
 		window.display();
 
 		// Exit the program after a delay when time is up
-		if (remainingSeconds == 0 && minutes == 0)
+		if (remainingSeconds == 58 && minutes == 1)
 		{
 			sf::sleep(sf::seconds(2)); // Add a 2-second delay
 			window.close();
-			music.stop();
 			sf::RenderWindow gameOver(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
 			gameOver.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 			gameOver.setFramerateLimit(60);
 			if (showGameOverMenu(gameOver, score))
 			{
+				music.stop();
 				main();
 			}
 		}
