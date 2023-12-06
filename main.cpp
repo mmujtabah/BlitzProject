@@ -874,8 +874,7 @@ bool showGameOverMenu(sf::RenderWindow& window, int score) {
 
 int main()
 {
-	sf::RenderWindow menuWindow(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
-	menuWindow.setFramerateLimit(60);
+	
 	// Load the icon image
 	sf::Image icon;
 	if (!icon.loadFromFile("images/icon.jpg"))
@@ -883,10 +882,10 @@ int main()
 		std::cout << "Failed to load icon.png";
 		return -1;
 	}
-	// Set the window icon
-
-	menuWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	if (firstPlay) {
+		sf::RenderWindow menuWindow(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
+		menuWindow.setFramerateLimit(60);
+		menuWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 		bool play = showMenu(menuWindow);
 		if (!play)
 		{
@@ -1183,6 +1182,7 @@ int main()
 		{
 			sf::sleep(sf::seconds(2)); // Add a 2-second delay
 			window.close();
+			music.stop();
 			sf::RenderWindow gameOver(sf::VideoMode(1000, 600), "Bejeweled Blitz", sf::Style::Close);
 			gameOver.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 			gameOver.setFramerateLimit(60);
