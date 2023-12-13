@@ -131,7 +131,7 @@ void loadImages(sf::Texture textures[])
 	}
 }
 
-// Return index of blue fire gem
+// Return index of fire gem
 int destroyerGem(int index)
 {
 	int returnIndex = 0;
