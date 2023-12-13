@@ -164,7 +164,7 @@ int destroyerGem(int index)
 	return returnIndex;
 }
 
-// Return index of blue fire gem
+// Return index of fire gem
 int flameGem(int index)
 {
 	int returnIndex = 0;
